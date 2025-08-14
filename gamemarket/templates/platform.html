@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Plataformas y Juegos</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Lista de Plataformas y Juegos</h1>
+    <table>
+      <tr>
+        <th>Plataforma</th>
+        <th>Juego</th>
+      </tr>
+      {% for item in platforms %}
+      <tr>
+        <td>{{ item.platform_name }}</td>
+        <td>{{ item.game_name }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Inicio</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body class="home-page">
+    <h1>Bienvenido a GameMarket</h1>
+
+    <div class="navbar">
+      <form action="{{ url_for('home') }}" method="get">
+        <button type="submit" class="nav-button">Inicio</button>
+      </form>
+      <form action="{{ url_for('get_clients') }}" method="get">
+        <button type="submit" class="nav-button">Clientes</button>
+      </form>
+      <form action="{{ url_for('get_games') }}" method="get">
+        <button type="submit" class="nav-button">Juegos</button>
+      </form>
+      <form action="{{ url_for('platform_html') }}" method="get">
+        <button type="submit" class="nav-button">Plataformas</button>
+      </form>
+      <form action="{{ url_for('buscar') }}" method="get">
+        <button type="submit" class="nav-button">Buscar Juego</button>
+      </form>
+    </div>
+  </body>
+</html>

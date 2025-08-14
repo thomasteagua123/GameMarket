@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buscar Juego</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Buscar Juego</h1>
+
+    <!-- Barra de navegación -->
+    <div class="navbar">
+      <form action="{{ url_for('home') }}" method="get">
+        <button type="submit" class="nav-button">Inicio</button>
+      </form>
+      <form action="{{ url_for('get_clients') }}" method="get">
+        <button type="submit" class="nav-button">Clientes</button>
+      </form>
+      <form action="{{ url_for('get_games') }}" method="get">
+        <button type="submit" class="nav-button">Juegos</button>
+      </form>
+      <form action="{{ url_for('platform_html') }}" method="get">
+        <button type="submit" class="nav-button">Plataformas</button>
+      </form>
+      <form action="{{ url_for('buscar') }}" method="get">
+        <button type="submit" class="nav-button">Buscar Juego</button>
+      </form>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form method="POST" style="text-align: center; margin-top: 20px">
+      <input type="text" name="juego" placeholder="Nombre del juego" required />
+      <button type="submit">Buscar</button>
+    </form>
+
+    <!-- Resultados -->
+    {% if resultados %}
+    <table>
+      <tr>
+        <th>Juego</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Plataforma</th>
+        <th>Cliente</th>
+      </tr>
+      {% for item in resultados %}
+      <tr>
+        <td>{{ item.game_name }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.platform_name }}</td>
+        <td>{{ item.first_name }} {{ item.last_name }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% elif request.method == 'POST' %}
+    <p style="text-align: center">No se encontraron resultados.</p>
+    {% endif %}
+  </body>
+</html>
