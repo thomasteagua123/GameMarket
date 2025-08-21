@@ -13,13 +13,13 @@ export function Games() {
   return (
     <div>
       <h1>Lista de Juegos</h1>
-      <ul>
+      <ol>
         {games.map((game, i) => (
           <li key={i}>
             {game.name} - {game.category} (${game.price})
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   );
 }
