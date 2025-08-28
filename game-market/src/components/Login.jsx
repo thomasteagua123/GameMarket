@@ -1,47 +1,32 @@
 import { useState } from "react";
 
-export default function Login() {
+export function Login() {
+  const [email, setEmail] = useState("")
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin =  (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:5173/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  credentials: "include",
-  body: JSON.stringify({ username, password }),
-});
-
-
-      let data;
-try {
-  data = await response.json();
-} catch (e) {
-  console.error("No se pudo parsear JSON", e);
-  data = { success: false, message: "Respuesta inválida del servidor" };
-}
-
-
-      if (response.ok) {
-        setMessage(data.message);
-        // Aquí puedes redirigir a otra página si el login es exitoso
-        // por ejemplo: window.location.href = "/dashboard";
-      } else {
-        setMessage(data.message);
-      }
-    } catch (error) {
-      setMessage("Error en la conexión al servidor");
-      console.error(error);
+    if (email === 'admin123@gmail.com' && username === "admin" && password === "1234"){
+      setMessage("¡Login exitoso!");
+    } else {
+      setMessage("Usuario u contraseña incorrectos")
     }
-  };
+};
 
   return (
     <div>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
+        <div>
+          <label>Email:</label>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
         <div>
           <label>Usuario:</label>
           <input
