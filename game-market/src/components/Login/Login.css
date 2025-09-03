@@ -1,0 +1,96 @@
+/* Estilo del contenedor principal */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilo de la caja del login */
+.login-box {
+    background-color: lightblue;
+    padding: 25px; /* Reduje el padding */
+    border-radius: 10px;
+    text-align: center;
+    width: 90%; /* Ancho ajustado para pantallas pequeñas */
+    max-width: 350px; /* Ancho máximo para que no se vea demasiado grande en tabletas */
+}
+
+/* Título principal */
+.login-box h2 {
+    color: #1a73e8;
+    font-size: 1.8em; /* Tamaño de fuente un poco más pequeño */
+    margin-bottom: 5px;
+}
+
+/* Subtítulo */
+.login-box .subtitle {
+    color: black;
+    margin-top: 0;
+    margin-bottom: 20px; /* Reduje el margen */
+}
+
+/* Contenedor de cada campo de entrada (input) */
+.input-group {
+    position: relative;
+    margin-bottom: 15px; /* Reduje el margen */
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 35px; /* Espacio para el icono */
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em; /* Para asegurar que el texto sea legible */
+}
+
+/* Iconos de los campos de entrada */
+.input-group .icon {
+    position: absolute;
+    left: 10px; /* Ajusté la posición del icono */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7f8c8d;
+}
+
+/* Enlace "Olvidaste tu contraseña?" */
+.forgot-password {
+    display: block;
+    text-align: right;
+    font-size: 0.8em;
+    color: #1a73e8;
+    text-decoration: none;
+    margin-bottom: 20px; /* Reduje el margen */
+}
+
+/* Botón de login */
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #1565c0;
+}
+
+/* Texto de registro */
+.register-text {
+    margin-top: 20px;
+    color: #000;
+    font-size: 0.8em;
+}
+
+.register-link {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: bold;
+}
