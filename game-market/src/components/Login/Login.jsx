@@ -1,20 +1,28 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"; // La ruta de importación es crucial
 import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // 👈 inicializar navigate
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Obtiene la función login del contexto
+
+  const admin = "admin123@gmail.com";
+  const contra = "1234";
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (email === "admin123@gmail.com" && password === "1234") {
+    if (email === admin && password === contra) {
+      login(email); // Llama a la función login del contexto
       setMessage("¡Login exitoso!");
-      setTimeout(() => navigate("/"), 1500); // 👈 vuelve al Home después de loguear
-    } else {
-      setMessage("Usuario o contraseña incorrectos");
+      setTimeout(() => navigate("/"), 1500);
+    } else if (email !== admin && password !== contra) {
+      login(email);
+      setMessage("¡Login exitoso!");
+      setTimeout(() => navigate("/homeClientes"), 1500);
     }
   };
 
@@ -48,7 +56,7 @@ function Login() {
           </div>
 
           <a
-            onClick={() => navigate("/forgot-password")} // 👈 podrías armar esta ruta después
+            onClick={() => navigate("/forgot-password")}
             className="forgot-password"
             style={{ cursor: "pointer" }}
           >
@@ -64,7 +72,7 @@ function Login() {
           <p className="register-text">
             Don't have an account?{" "}
             <span
-              onClick={() => navigate("/register")} // 👈 lleva a un Register (futuro)
+              onClick={() => navigate("/register")}
               className="register-link"
               style={{ cursor: "pointer", color: "blue" }}
             >
@@ -75,7 +83,7 @@ function Login() {
           <button
             type="button"
             className="back-button"
-            onClick={() => navigate("/")} // 👈 volver al Home
+            onClick={() => navigate("/")}
           >
             Volver al Home
           </button>

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Clientes from "../Clientes";
 import "./home.css";
 
-export function Home() {
+export function HomeClientes() {
   const [games, setGames] = useState([]);
   const navigate = useNavigate();
   const { user, isAdmin, logout } = useAuth();
@@ -23,7 +22,6 @@ export function Home() {
 
   return (
     <div>
-      <Clientes />
       <header className="header">
         {user ? (
           <>
