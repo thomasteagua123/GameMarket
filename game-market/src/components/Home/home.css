@@ -1,12 +1,89 @@
 body {
   font-family: "Poppins", sans-serif;
   background: #f8f9fa;
-  padding: 2rem;
-  color: black
+  margin: 0;
+  color: black;
+}
+
+/* Barra superior */
+.header {
+  display: flex;
+  justify-content: space-between; /* sigue separando */
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: #2a9df4; /* celeste */
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 2px solid #1e81ce;
+  flex-direction: row-reverse; /* 👈 invierte orden: botón primero */
+}
+
+.header h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Botón */
+.register-btn {
+  padding: 0.6rem 1.2rem;
+  background: #1e81ce;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.register-btn:hover {
+  background: #1661a9;
 }
 
 
+/* Layout principal: sidebar + contenido */
+.catalogo {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  padding: 1rem 2rem;
+}
 
+/* Sidebar de categorías */
+.sidebar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.sidebar h3 {
+  margin-bottom: 1rem;
+  color: #2a5298;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.sidebar li:hover {
+  color: #2a5298;
+  font-weight: bold;
+}
+
+/* Título */
 .title {
   text-align: center;
   font-size: 2rem;
@@ -14,10 +91,11 @@ body {
   color: #2a5298;
 }
 
+/* Grid de juegos */
 .games-grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* responsive */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   padding: 0;
   margin: 0;
@@ -32,8 +110,39 @@ body {
   line-height: 1.4;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .games-grid li:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* 📱 Ajustes para celulares */
+@media (max-width: 768px) {
+  .catalogo {
+    grid-template-columns: 1fr; /* Sidebar arriba, juegos abajo */
+  }
+
+  .sidebar {
+    margin-bottom: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .register-btn {
+    align-self: flex-end;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
 }
