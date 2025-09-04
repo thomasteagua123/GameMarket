@@ -5,19 +5,33 @@ import "./home.css";
 
 export function HomeClientes() {
   const [games, setGames] = useState([]);
+  const [filteredGames, setFilteredGames] = useState([]); // Nuevo estado para los juegos filtrados
   const navigate = useNavigate();
   const { user, isAdmin, logout } = useAuth();
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/games")
       .then((res) => res.json())
-      .then((data) => setGames(data))
+      .then((data) => {
+        setGames(data);
+        setFilteredGames(data); // Muestra todos los juegos al inicio
+      })
       .catch((err) => console.error(err));
   }, []);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  // Función para manejar la búsqueda y filtrar los juegos
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const filtered = games.filter(game =>
+      game.name.toLowerCase().includes(searchTerm) ||
+      game.category.toLowerCase().includes(searchTerm)
+    );
+    setFilteredGames(filtered);
   };
 
   return (
@@ -28,14 +42,28 @@ export function HomeClientes() {
             <span style={{ marginRight: "10px" }}>
               Bienvenido, {user.email}!
             </span>
+            <input
+              type="text"
+              placeholder="Buscar juegos..."
+              onChange={handleSearch}
+              className="buscar-input"
+            />
             <button className="register-btn" onClick={handleLogout}>
               Cerrar Sesión
             </button>
           </>
         ) : (
-          <button className="register-btn" onClick={() => navigate("/login")}>
-            Registrarse
-          </button>
+          <>
+            <input
+              type="text"
+              placeholder="Buscar juegos..."
+              onChange={handleSearch}
+              className="buscar-input"
+            />
+            <button className="register-btn" onClick={() => navigate("/login")}>
+              Registrarse
+            </button>
+          </>
         )}
       </header>
 
@@ -63,16 +91,15 @@ export function HomeClientes() {
             </div>
           )}
           <ol className="games-grid">
-            <li>Hollow Knight - Metroidvania / Plataformas ($79.99)</li>
-            <li>The Legend of Zelda: Breath of the Wild - Aventura ($7.00)</li>
-            <li>FIFA 24 - Deportes / Fútbol ($6.99)</li>
-            <li>Elden Ring - RPG de acción / Mundo abierto ($42.99)</li>
-            <li>Stardew Valley - Simulación / RPG ($21.99)</li>
-            <li>Call of Duty: Modern Warfare II - Shooter ($19.99)</li>
-            <li>Among Us - Party Game / Deductivo ($9.99)</li>
-            <li>God of War - Acción y Aventura ($79.99)</li>
-            <li>Minecraft - Aventura ($5.00)</li>
-            <li>Mortal Kombat - Lucha ($35.97)</li>
+            {filteredGames.length > 0 ? (
+              filteredGames.map((game, index) => (
+                <li key={index}>
+                  {game.name} - {game.category} (${game.price})
+                </li>
+              ))
+            ) : (
+              <p>No se encontraron juegos que coincidan con la búsqueda.</p>
+            )}
           </ol>
         </main>
       </div>

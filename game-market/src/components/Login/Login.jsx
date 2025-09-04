@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; // La ruta de importación es crucial
+import { useAuth } from "../../context/AuthContext"; 
 import "./Login.css";
 
 function Login() {
@@ -8,21 +8,30 @@ function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Obtiene la función login del contexto
+  const { login } = useAuth();
 
   const admin = "admin123@gmail.com";
   const contra = "1234";
 
   const handleLogin = (e) => {
     e.preventDefault();
+
+    // Validación del admin
     if (email === admin && password === contra) {
-      login(email); // Llama a la función login del contexto
+      login(email);
       setMessage("¡Login exitoso!");
       setTimeout(() => navigate("/"), 1500);
-    } else if (email !== admin && password !== contra) {
+    } 
+    // Validación para clientes (ejemplo: cualquier otro email con su contraseña correcta)
+    else if (email !== admin && password.trim() !== "") {
+      // Aquí podrías hacer validación real contra tu base de datos o lista de usuarios
       login(email);
       setMessage("¡Login exitoso!");
       setTimeout(() => navigate("/homeClientes"), 1500);
+    } 
+    // En caso de datos incorrectos
+    else {
+      setMessage("Correo o contraseña incorrectos");
     }
   };
 
@@ -41,6 +50,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email"
+              required
             />
           </div>
 
@@ -52,6 +62,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               aria-label="Password"
+              required
             />
           </div>
 

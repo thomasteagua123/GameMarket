@@ -1,0 +1,64 @@
+.buscar-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #0288d1; /* azul de la barra */
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.buscar-form {
+  display: flex;
+  flex: 1; /* ocupa espacio disponible entre botones */
+}
+
+.buscar-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+}
+
+.buscar-button {
+  padding: 8px 16px;
+  background-color: #0277bd; /* azul más oscuro */
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.buscar-button:hover {
+  background-color: #01579b;
+}
+
+.buscar-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.registrarse-button,
+.logout-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.registrarse-button {
+  background-color: #039be5;
+}
+
+.registrarse-button:hover {
+  background-color: #0288d1;
+}
+
+.logout-button {
+  background-color: #d32f2f;
+}
+
+.logout-button:hover {
+  background-color: #b71c1c;
+}
