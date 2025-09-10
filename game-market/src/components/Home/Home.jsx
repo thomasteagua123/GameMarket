@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Clientes from "../Clientes";
 import "./home.css";
 
 export function Home() {
@@ -23,7 +22,7 @@ export function Home() {
 
   return (
     <div>
-      <Clientes />
+      {/* 🔹 Header */}
       <header className="header">
         {user ? (
           <>
@@ -33,7 +32,9 @@ export function Home() {
             <button className="register-btn" onClick={handleLogout}>
               Cerrar Sesión
             </button>
+            
           </>
+          
         ) : (
           <button className="register-btn" onClick={() => navigate("/login")}>
             Registrarse
@@ -41,22 +42,26 @@ export function Home() {
         )}
       </header>
 
+      {/* 🔹 Layout principal */}
       <div className="catalogo">
+        {/* Sidebar */}
         <aside className="sidebar">
           <h3>Categorías</h3>
           <ul>
-            <li>Acción</li>
-            <li>Aventura</li>
-            <li>RPG</li>
-            <li>Deportes</li>
-            <li>Simulación</li>
-            <li>Shooter</li>
-            <li>Lucha</li>
+            <li><Link to="/categoria/Acción">Acción</Link></li>
+            <li><Link to="/categoria/Aventura">Aventura</Link></li>
+            <li><Link to="/categoria/RPG">RPG</Link></li>
+            <li><Link to="/categoria/Deportes">Deportes</Link></li>
+            <li><Link to="/categoria/Simulación">Simulación</Link></li>
+            <li><Link to="/categoria/Shooter">Shooter</Link></li>
+            <li><Link to="/categoria/Lucha">Lucha</Link></li>
           </ul>
         </aside>
 
+        {/* Contenido principal */}
         <main>
           <h2 className="title">Lista de Juegos</h2>
+
           {isAdmin && (
             <div style={{ marginBottom: "20px" }}>
               <Link to="/clientes">
@@ -64,18 +69,20 @@ export function Home() {
               </Link>
             </div>
           )}
-          <ol className="games-grid">
-            <li>Hollow Knight - Metroidvania / Plataformas ($79.99)</li>
-            <li>The Legend of Zelda: Breath of the Wild - Aventura ($7.00)</li>
-            <li>FIFA 24 - Deportes / Fútbol ($6.99)</li>
-            <li>Elden Ring - RPG de acción / Mundo abierto ($42.99)</li>
-            <li>Stardew Valley - Simulación / RPG ($21.99)</li>
-            <li>Call of Duty: Modern Warfare II - Shooter ($19.99)</li>
-            <li>Among Us - Party Game / Deductivo ($9.99)</li>
-            <li>God of War - Acción y Aventura ($79.99)</li>
-            <li>Minecraft - Aventura ($5.00)</li>
-            <li>Mortal Kombat - Lucha ($35.97)</li>
-          </ol>
+
+          {/* 🔹 Render dinámico de juegos */}
+          <ul className="games-grid">
+  {games.length > 0 ? (
+    games.map((game) => (
+      <li key={game.game_id}>
+        {game.name} - {game.category} (${game.price})
+      </li>
+    ))
+  ) : (
+    <p>No hay juegos disponibles</p>
+  )}
+</ul>
+
         </main>
       </div>
     </div>

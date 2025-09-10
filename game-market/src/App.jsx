@@ -6,8 +6,9 @@ import { Plataformas } from "./components/Platform";
 import { Home } from "./components/Home/Home";
 import { HomeClientes } from "./components/Home/HomeClientes.jsx"; // 👈 New import
 import Register from "./components/Login/Register";
-import Clientes from "./components/Clientes.jsx";
+import Clientes from "./components/Clientes/Clientes.jsx";
 import { useAuth } from "./context/AuthContext";
+import { Categoria } from "./components/Home/Categoria.jsx";
 
 function App() {
   const { isAdmin } = useAuth();
@@ -20,6 +21,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/homeClientes" element={<HomeClientes />} />
       {isAdmin && <Route path="/clientes" element={<Clientes />} />}
+      <Route path="/categoria/:nombre" element={<Categoria />}/> 
     </Routes>
   );
 }
