@@ -41,6 +41,25 @@ def get_games():
     conn.close()
     return jsonify(games)
 
+@app.route("/api/clients", methods=["GET"])
+def get_client():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+
+    cursor.execute("""
+        SELECT c.client_id, c.first_name, c.last_name, g.name
+        FROM client c
+        JOIN games g ON c.game_id = g.game_id
+    """)
+    
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return jsonify(rows)
+
+
 
 # ---------------- REGISTRO ---------------- #
 @app.route('/api/usuarios', methods=['POST'])
