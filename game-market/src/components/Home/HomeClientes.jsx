@@ -5,33 +5,60 @@ import "./home.css";
 
 export function HomeClientes() {
   const [games, setGames] = useState([]);
-  const [filteredGames, setFilteredGames] = useState([]); // Nuevo estado para los juegos filtrados
+  const [filteredGames, setFilteredGames] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+  const [showCart, setShowCart] = useState(false);
   const navigate = useNavigate();
   const { user, isAdmin, logout } = useAuth();
 
+  // Cargar juegos y carrito desde API y sessionStorage
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/games")
       .then((res) => res.json())
       .then((data) => {
         setGames(data);
-        setFilteredGames(data); // Muestra todos los juegos al inicio
+        setFilteredGames(data);
       })
       .catch((err) => console.error(err));
+
+    const storedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    setCartItems(storedCart);
+    setCartCount(storedCart.reduce((sum, item) => sum + item.cantidad, 0));
   }, []);
+
+  // Manejar búsqueda
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const filtered = games.filter(
+      (game) =>
+        game.name.toLowerCase().includes(searchTerm) ||
+        game.category.toLowerCase().includes(searchTerm)
+    );
+    setFilteredGames(filtered);
+  };
+
+  // Agregar juego al carrito
+  const handleAddToCart = (game) => {
+    const storedCart = [...cartItems];
+    const existingItem = storedCart.find(
+      (item) => item.game_id === game.game_id
+    );
+
+    if (existingItem) {
+      existingItem.cantidad += 1;
+    } else {
+      storedCart.push({ game_id: game.game_id, name: game.name, cantidad: 1 });
+    }
+
+    sessionStorage.setItem("cart", JSON.stringify(storedCart));
+    setCartItems(storedCart);
+    setCartCount(storedCart.reduce((sum, item) => sum + item.cantidad, 0));
+  };
 
   const handleLogout = () => {
     logout();
     navigate("/login");
-  };
-
-  // Función para manejar la búsqueda y filtrar los juegos
-  const handleSearch = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = games.filter(game =>
-      game.name.toLowerCase().includes(searchTerm) ||
-      game.category.toLowerCase().includes(searchTerm)
-    );
-    setFilteredGames(filtered);
   };
 
   return (
@@ -42,6 +69,7 @@ export function HomeClientes() {
             <span style={{ marginRight: "10px" }}>
               Bienvenido, {user.email}!
             </span>
+            <span style={{ marginRight: "20px" }}>🛒 {cartCount} items</span>
             <input
               type="text"
               placeholder="Buscar juegos..."
@@ -50,6 +78,9 @@ export function HomeClientes() {
             />
             <button className="register-btn" onClick={handleLogout}>
               Cerrar Sesión
+            </button>
+            <button onClick={() => setShowCart(!showCart)}>
+              {showCart ? "Cerrar Carrito" : "Ver Carrito"}
             </button>
           </>
         ) : (
@@ -90,17 +121,44 @@ export function HomeClientes() {
               </Link>
             </div>
           )}
+
           <ol className="games-grid">
             {filteredGames.length > 0 ? (
-              filteredGames.map((game, index) => (
-                <li key={index}>
-                  {game.name} - {game.category} (${game.price})
+              filteredGames.map((game) => (
+                <li key={game.game_id} className="game-item">
+                  <div>
+                    {game.name} - {game.category} (${game.price})
+                  </div>
+                  <button
+                    className="agregar-btn"
+                    onClick={() => handleAddToCart(game)}
+                  >
+                    Agregar al carrito
+                  </button>
                 </li>
               ))
             ) : (
               <p>No se encontraron juegos que coincidan con la búsqueda.</p>
             )}
           </ol>
+
+          {/* Mostrar carrito dentro de la misma página */}
+          {showCart && (
+            <div className="cart-container">
+              <h2>Tu Carrito</h2>
+              {cartItems.length > 0 ? (
+                <ul>
+                  {cartItems.map((item) => (
+                    <li key={item.game_id}>
+                      {item.name} x {item.cantidad}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Tu carrito está vacío.</p>
+              )}
+            </div>
+          )}
         </main>
       </div>
     </div>
