@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Clientes.css";
+import SimularCompra from "./SimularCompra.jsx"; // 👈 Nuevo componente
 
 function Clientes() {
   const [clients, setClients] = useState([]);
@@ -16,18 +17,17 @@ function Clientes() {
       .catch((err) => console.error(err));
   }, []);
 
-  // 🔹 Agrupar clientes con total y juegos
   const gastosPorCliente = clients.reduce((acc, client) => {
     if (!acc[client.client_id]) {
       acc[client.client_id] = {
         first_name: client.first_name,
         last_name: client.last_name,
         total: 0,
-        games: []
+        games: [],
       };
     }
     acc[client.client_id].total += Number(client.price) || 0;
-    acc[client.client_id].games.push(client.name); // 👈 nombre del juego
+    acc[client.client_id].games.push(client.name);
     return acc;
   }, {});
 
@@ -37,11 +37,10 @@ function Clientes() {
       first_name: info.first_name,
       last_name: info.last_name,
       total: Number(info.total) || 0,
-      games: info.games
+      games: info.games,
     })
   );
 
-  // 🔹 Total general de todos los clientes
   const totalGeneral = clientesConTotal.reduce(
     (sum, client) => sum + client.total,
     0
@@ -73,7 +72,7 @@ function Clientes() {
         </div>
         <p>Gestiona los ingresos y compras de tus clientes.</p>
       </header>
-
+      <SimularCompra /> {/* 👈 Formulario de compra ficticia */}
       <table className="clientes-table">
         <thead>
           <tr>
@@ -85,28 +84,28 @@ function Clientes() {
           </tr>
         </thead>
         <tbody>
-  {clientesConTotal.map((client) => (
-    <tr
-      key={client.client_id || `${client.first_name}-${client.last_name}`}
-    >
-      <td>{client.client_id}</td>
-      <td>{client.first_name}</td>
-      <td>{client.last_name}</td>
-      <td>{client.games.join(", ")}</td> {/* 👈 juegos en texto */}
-      <td>${Number(client.total).toFixed(2)}</td>
-    </tr>
-  ))}
-
-  <tr className="total-row">
-    <td colSpan="4" style={{ textAlign: "right", fontWeight: "bold" }}>
-      Total General:
-    </td>
-    <td style={{ fontWeight: "bold" }}>
-      ${Number(totalGeneral).toFixed(2)}
-    </td>
-  </tr>
-</tbody>
-
+          {clientesConTotal.map((client) => (
+            <tr
+              key={
+                client.client_id || `${client.first_name}-${client.last_name}`
+              }
+            >
+              <td>{client.client_id}</td>
+              <td>{client.first_name}</td>
+              <td>{client.last_name}</td>
+              <td>{client.games.join(", ")}</td>
+              <td>${Number(client.total).toFixed(2)}</td>
+            </tr>
+          ))}
+          <tr className="total-row">
+            <td colSpan="4" style={{ textAlign: "right", fontWeight: "bold" }}>
+              Total General:
+            </td>
+            <td style={{ fontWeight: "bold" }}>
+              ${Number(totalGeneral).toFixed(2)}
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );

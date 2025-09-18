@@ -1,0 +1,31 @@
+Visa Test Card:
+
+Número de tarjeta: 4242 4242 4242 4242
+
+Fecha de vencimiento (MM/AA): 12/25
+
+CVC: 123
+
+Mastercard Test Card:
+
+Número de tarjeta: 5555 5555 5555 4444
+
+Fecha de vencimiento (MM/AA): 12/25
+
+CVC: 123
+
+American Express Test Card:
+
+Número de tarjeta: 3782 8224 6310 005
+
+Fecha de vencimiento (MM/AA): 12/25
+
+CVC: 1234
+
+Discover Test Card:
+
+Número de tarjeta: 6011 6011 6011 6611
+
+Fecha de vencimiento (MM/AA): 12/25
+
+CVC: 123
