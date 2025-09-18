@@ -45,14 +45,11 @@ def get_games():
 def get_client():
     conn = get_db_connection()
     cursor = conn.cursor()
-    
-
     cursor.execute("""
-        SELECT c.client_id, c.first_name, c.last_name, g.name
+        SELECT c.client_id, c.first_name, c.last_name, g.name, g.price
         FROM client c
         JOIN games g ON c.game_id = g.game_id
     """)
-    
     rows = cursor.fetchall()
     cursor.close()
     conn.close()

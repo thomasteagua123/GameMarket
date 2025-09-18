@@ -99,16 +99,17 @@ export function HomeClientes() {
       </header>
 
       <div className="catalogo">
+        {/* Sidebar */}
         <aside className="sidebar">
           <h3>Categorías</h3>
           <ul>
-            <li>Acción</li>
-            <li>Aventura</li>
-            <li>RPG</li>
-            <li>Deportes</li>
-            <li>Simulación</li>
-            <li>Shooter</li>
-            <li>Lucha</li>
+            <li><Link to="/categoria/Acción">Acción</Link></li>
+            <li><Link to="/categoria/Aventura">Aventura</Link></li>
+            <li><Link to="/categoria/RPG">RPG</Link></li>
+            <li><Link to="/categoria/Deportes">Deportes</Link></li>
+            <li><Link to="/categoria/Simulación">Simulación</Link></li>
+            <li><Link to="/categoria/Shooter">Shooter</Link></li>
+            <li><Link to="/categoria/Lucha">Lucha</Link></li>
           </ul>
         </aside>
 

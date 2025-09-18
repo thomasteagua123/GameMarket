@@ -71,17 +71,17 @@ export function Home() {
           )}
 
           {/* 🔹 Render dinámico de juegos */}
-          <ul className="games-grid">
-  {games.length > 0 ? (
-    games.map((game) => (
-      <li key={game.game_id}>
-        {game.name} - {game.category} (${game.price})
-      </li>
-    ))
-  ) : (
-    <p>No hay juegos disponibles</p>
-  )}
-</ul>
+            <ul className="games-grid">
+              {games.length > 0 ? (
+                games.map((game) => (
+                  <li key={game.game_id}>
+                    {game.name} - {game.category} (${game.price})
+                  </li>
+                ))
+              ) : (
+                <p>No hay juegos disponibles</p>
+              )}
+            </ul>
 
         </main>
       </div>
