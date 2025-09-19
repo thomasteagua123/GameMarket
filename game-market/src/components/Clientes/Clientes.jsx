@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Clientes.css";
 import SimularCompra from "./SimularCompra.jsx"; // 👈 Nuevo componente
 
-function Clientes() {
+export function Clientes() {
   const [clients, setClients] = useState([]);
   const navigate = useNavigate();
 
@@ -62,17 +62,12 @@ function Clientes() {
       <header className="clientes-header">
         <div className="header-top">
           <h1>Panel de Clientes</h1>
-          <button
-            type="button"
-            className="volverHome"
-            onClick={() => navigate("/")}
-          >
+          <button class="botonA" type="button" onClick={() => navigate("/")}>
             Volver al Home
           </button>
         </div>
         <p>Gestiona los ingresos y compras de tus clientes.</p>
       </header>
-      <SimularCompra /> {/* 👈 Formulario de compra ficticia */}
       <table className="clientes-table">
         <thead>
           <tr>

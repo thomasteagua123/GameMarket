@@ -7,10 +7,10 @@ import { Home } from "./components/Home/Home";
 import { HomeClientes } from "./components/Home/HomeClientes.jsx";
 import { Plataformas } from "./components/Platform";
 import { Categoria } from "./components/Home/Categoria.jsx";
-import Clientes from "./components/Clientes/Clientes.jsx";
 import SimularCompra from "./components/Clientes/SimularCompra.jsx";
-import Carrito from "./components/Clientes/Carrito.jsx";
 import { useAuth } from "./context/AuthContext";
+import { Clientes } from "./components/Clientes/Clientes.jsx";
+import { Carrito } from "./components/Clientes/Carrito.jsx";
 
 function App() {
   const { isAdmin } = useAuth();

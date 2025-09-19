@@ -1,50 +1,63 @@
-// Carrito.jsx
+// src/components/Clientes/Carrito.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Carrito() {
-  const [carrito, setCarrito] = useState([]);
+export function Carrito() {
+  const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const datos = JSON.parse(localStorage.getItem("carrito")) || [];
-    setCarrito(datos);
+    const storedCart = JSON.parse(sessionStorage.getItem("carrito")) || [];
+    setCartItems(storedCart);
   }, []);
 
-  const total = carrito.reduce(
-    (acc, item) => acc + Number(item.precio) * item.cantidad,
-    0
-  );
+  const handleRemove = (game_id) => {
+    const updatedCart = cartItems.filter((item) => item.game_id !== game_id);
+    setCartItems(updatedCart);
+    sessionStorage.setItem("carrito", JSON.stringify(updatedCart));
+  };
 
-  const irAPago = () => {
-    // 👉 guardamos los datos de la compra antes de redirigir
-    localStorage.setItem("compra", JSON.stringify({ carrito, total }));
-    navigate("/simular-compra"); // 👈 redirige al formulario
+  const handleClearCart = () => {
+    setCartItems([]);
+    sessionStorage.removeItem("carrito");
   };
 
   return (
-    <div className="carrito-container">
+    <div style={{ padding: "20px" }}>
+      <button className="botonI" onClick={() => navigate("/homeClientes")}>
+        Volver a la tienda
+      </button>
       <h2>🛒 Tu Carrito</h2>
-      {carrito.length === 0 ? (
-        <p>No hay productos en el carrito.</p>
-      ) : (
+      {cartItems.length > 0 ? (
         <>
           <ul>
-            {carrito.map((item, index) => (
-              <li key={`${item.game_id}-${index}`}>
-                {item.nombre} x{item.cantidad} - $
-                {Number(item.precio).toFixed(2)}
+            {cartItems.map((item, index) => (
+              <li
+                key={`${item.game_id}-${index}`}
+                style={{ marginBottom: "10px" }}
+              >
+                {item.nombre} x {item.cantidad} (${item.precio * item.cantidad})
+                <button
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => handleRemove(item.game_id)}
+                >
+                  ❌ Eliminar
+                </button>
               </li>
             ))}
           </ul>
-          <p>
-            <strong>Total:</strong> ${total.toFixed(2)}
-          </p>
-          <button onClick={irAPago}>Ir a pago</button>
+          <h3>
+            Total: $
+            {cartItems.reduce(
+              (sum, item) => sum + item.precio * item.cantidad,
+              0
+            )}
+          </h3>
+          <button onClick={handleClearCart}>Vaciar Carrito</button>
         </>
+      ) : (
+        <p>Tu carrito está vacío.</p>
       )}
     </div>
   );
 }
-
-export default Carrito;

@@ -32,9 +32,7 @@ export function Home() {
             <button className="register-btn" onClick={handleLogout}>
               Cerrar Sesión
             </button>
-            
           </>
-          
         ) : (
           <button className="register-btn" onClick={() => navigate("/login")}>
             Registrarse
@@ -48,13 +46,27 @@ export function Home() {
         <aside className="sidebar">
           <h3>Categorías</h3>
           <ul>
-            <li><Link to="/categoria/Acción">Acción</Link></li>
-            <li><Link to="/categoria/Aventura">Aventura</Link></li>
-            <li><Link to="/categoria/RPG">RPG</Link></li>
-            <li><Link to="/categoria/Deportes">Deportes</Link></li>
-            <li><Link to="/categoria/Simulación">Simulación</Link></li>
-            <li><Link to="/categoria/Shooter">Shooter</Link></li>
-            <li><Link to="/categoria/Lucha">Lucha</Link></li>
+            <li>
+              <Link to="/categoria/Acción">Acción</Link>
+            </li>
+            <li>
+              <Link to="/categoria/Aventura">Aventura</Link>
+            </li>
+            <li>
+              <Link to="/categoria/RPG">RPG</Link>
+            </li>
+            <li>
+              <Link to="/categoria/Deportes">Deportes</Link>
+            </li>
+            <li>
+              <Link to="/categoria/Simulación">Simulación</Link>
+            </li>
+            <li>
+              <Link to="/categoria/Shooter">Shooter</Link>
+            </li>
+            <li>
+              <Link to="/categoria/Lucha">Lucha</Link>
+            </li>
           </ul>
         </aside>
 
@@ -65,24 +77,23 @@ export function Home() {
           {isAdmin && (
             <div style={{ marginBottom: "20px" }}>
               <Link to="/clientes">
-                <button>Ir a Panel de Clientes</button>
+                <button class="botonA">Ir a Panel de Clientes</button>
               </Link>
             </div>
           )}
 
           {/* 🔹 Render dinámico de juegos */}
-            <ul className="games-grid">
-              {games.length > 0 ? (
-                games.map((game) => (
-                  <li key={game.game_id}>
-                    {game.name} - {game.category} (${game.price})
-                  </li>
-                ))
-              ) : (
-                <p>No hay juegos disponibles</p>
-              )}
-            </ul>
-
+          <ul className="games-grid">
+            {games.length > 0 ? (
+              games.map((game) => (
+                <li key={game.game_id}>
+                  {game.name} - {game.category} (${game.price})
+                </li>
+              ))
+            ) : (
+              <p>No hay juegos disponibles</p>
+            )}
+          </ul>
         </main>
       </div>
     </div>

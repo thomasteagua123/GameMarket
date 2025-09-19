@@ -1,3 +1,4 @@
+// src/components/Home/HomeClientes.jsx
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -20,7 +21,7 @@ export function HomeClientes() {
       })
       .catch((err) => console.error(err));
 
-    const storedCart = JSON.parse(localStorage.getItem("carrito")) || [];
+    const storedCart = JSON.parse(sessionStorage.getItem("carrito")) || [];
     setCartItems(storedCart);
     setCartCount(storedCart.reduce((sum, item) => sum + item.cantidad, 0));
   }, []);
@@ -36,25 +37,33 @@ export function HomeClientes() {
   };
 
   const handleAddToCart = (game) => {
-    const storedCart = [...cartItems];
-    const existingItem = storedCart.find(
+    let updatedCart;
+
+    const existingItem = cartItems.find(
       (item) => item.game_id === game.game_id
     );
 
     if (existingItem) {
-      existingItem.cantidad += 1;
+      updatedCart = cartItems.map((item) =>
+        item.game_id === game.game_id
+          ? { ...item, cantidad: item.cantidad + 1 }
+          : item
+      );
     } else {
-      storedCart.push({
-        game_id: game.game_id,
-        nombre: game.name,
-        precio: game.price,
-        cantidad: 1,
-      });
+      updatedCart = [
+        ...cartItems,
+        {
+          game_id: game.game_id,
+          nombre: game.name,
+          precio: game.price,
+          cantidad: 1,
+        },
+      ];
     }
 
-    localStorage.setItem("carrito", JSON.stringify(storedCart));
-    setCartItems(storedCart);
-    setCartCount(storedCart.reduce((sum, item) => sum + item.cantidad, 0));
+    sessionStorage.setItem("carrito", JSON.stringify(updatedCart));
+    setCartItems(updatedCart);
+    setCartCount(updatedCart.reduce((sum, item) => sum + item.cantidad, 0));
   };
 
   const handleLogout = () => {
@@ -139,10 +148,10 @@ export function HomeClientes() {
             </div>
           )}
 
-          {filteredGames.length > 0 ? (
-            <ol className="games-grid">
-              {filteredGames.map((game) => (
-                <li key={game.game_id} className="game-item">
+          <ol className="games-grid">
+            {filteredGames.length > 0 ? (
+              filteredGames.map((game, index) => (
+                <li key={`${game.game_id}-${index}`} className="game-item">
                   <div>
                     {game.name} - {game.category} (${game.price})
                   </div>
@@ -153,11 +162,11 @@ export function HomeClientes() {
                     Agregar al carrito
                   </button>
                 </li>
-              ))}
-            </ol>
-          ) : (
-            <p>No se encontraron juegos que coincidan con la búsqueda.</p>
-          )}
+              ))
+            ) : (
+              <p>No se encontraron juegos que coincidan con la búsqueda.</p>
+            )}
+          </ol>
         </main>
       </div>
     </div>

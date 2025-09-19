@@ -41,7 +41,6 @@ body {
   background: #1661a9;
 }
 
-
 /* Layout principal: sidebar + contenido */
 .catalogo {
   display: grid;
@@ -55,7 +54,7 @@ body {
   background: #fff;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h3 {
@@ -83,6 +82,11 @@ body {
   font-weight: bold;
 }
 
+.botonA {
+  background-color: #1e81ce;
+  color: white;
+}
+
 /* Título */
 .title {
   text-align: center;
@@ -105,14 +109,14 @@ body {
   background: #fff;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 0.95rem;
   line-height: 1.4;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .games-grid li:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 /* 📱 Ajustes para celulares */
