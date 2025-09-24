@@ -16,7 +16,7 @@ export function HomeClientes() {
     fetch("http://127.0.0.1:5000/api/games")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
         setGames(data);
         setFilteredGames(data);
       })
@@ -42,7 +42,6 @@ export function HomeClientes() {
 
     const existingItem = cartItems.find(
       (item) => item.game_id === game.game_id
-      
     );
 
     if (existingItem) {
@@ -95,7 +94,7 @@ export function HomeClientes() {
             <button className="register-btn" onClick={handleLogout}>
               Cerrar Sesión
             </button>
-            <button onClick={irAlCarrito}>Ir al Carrito</button>
+            <button onClick={irAlCarrito}>🛒</button>
           </>
         ) : (
           <>
