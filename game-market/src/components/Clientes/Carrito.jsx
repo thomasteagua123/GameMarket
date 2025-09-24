@@ -21,7 +21,10 @@ export function Carrito() {
     setCartItems([]);
     sessionStorage.removeItem("carrito");
   };
-
+  
+  const payment = () => {
+    navigate("/simular-compra");
+  }
   return (
     <div style={{ padding: "20px" }}>
       <button className="botonI" onClick={() => navigate("/homeClientes")}>
@@ -39,6 +42,7 @@ export function Carrito() {
                 {item.nombre} x {item.cantidad} (${item.precio * item.cantidad})
                 <button
                   style={{ marginLeft: "10px" }}
+                  class="botonI"
                   onClick={() => handleRemove(item.game_id)}
                 >
                   ❌ Eliminar
@@ -53,11 +57,12 @@ export function Carrito() {
               0
             )}
           </h3>
-          <button onClick={handleClearCart}>Vaciar Carrito</button>
+          <button class="botonI" onClick={handleClearCart}>Vaciar Carrito</button>
         </>
       ) : (
         <p>Tu carrito está vacío.</p>
       )}
+      <button class="botonI" onClick={payment}>Pagar</button>
     </div>
   );
 }

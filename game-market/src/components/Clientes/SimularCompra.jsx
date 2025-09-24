@@ -1,6 +1,7 @@
 import { useState } from "react";
 import valid from "card-validator";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import "./Clientes.css"
 
 export default function PaymentForm({ onSuccess }) {
   const [cardData, setCardData] = useState({
@@ -33,9 +34,10 @@ export default function PaymentForm({ onSuccess }) {
     // Redirigir al Home después de un pago exitoso
     navigate("/"); // Redirige a la ruta '/' (Home)
   };
-
+  const home = ()=>{navigate("/homeClientes");}
   return (
     <div className="payment-form">
+      <button class="botonI" onClick={home}>Volver al home</button>
       <h2>Datos de la tarjeta</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -70,7 +72,7 @@ export default function PaymentForm({ onSuccess }) {
           onChange={handleChange}
           required
         />
-        <button type="submit">Confirmar Pago</button>
+        <button class="botonI" type="submit">Confirmar Pago</button>
       </form>
     </div>
   );

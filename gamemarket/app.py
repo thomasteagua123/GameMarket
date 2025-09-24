@@ -35,7 +35,7 @@ def home():
 def get_games():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT name, category, price FROM games")
+    cursor.execute("SELECT game_id, name, category, price FROM games")
     games = cursor.fetchall()
     cursor.close()
     conn.close()
