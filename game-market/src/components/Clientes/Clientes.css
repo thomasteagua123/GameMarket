@@ -1,55 +1,28 @@
+/* Tipografía global */
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* -------- TABLA CLIENTES -------- */
 .clientes-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: "Poppins", sans-serif;
   margin-top: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .clientes-table th,
 .clientes-table td {
   border: 1px solid #ddd;
-  padding: 0.8rem;
+  padding: 0.9rem 1rem;
   text-align: left;
-}
-
-.carrito-container {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  padding: 0;
-  margin: 0;
-}
-.carrito-container {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 0.95rem;
-  line-height: 1.4;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.botonI {
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-}
-
-.botonI:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.botonA {
-  background-color: #1a73e8;
 }
 
 .clientes-table th {
@@ -65,4 +38,79 @@
 .clientes-table tbody tr:hover {
   background-color: #e0f0ff;
   cursor: pointer;
+}
+
+/* -------- CARRITO -------- */
+.carrito-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carrito-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* -------- BOTONES -------- */
+.botonI,
+.botonA {
+  display: inline-block;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+.botonI:hover,
+.botonA:hover {
+  background-color: #1669c1;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* -------- FORMULARIO PAGO -------- */
+.payment-form {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.payment-form h2 {
+  margin-bottom: 1.5rem;
+  color: #2d2d2d;
+  font-weight: 600;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.payment-form input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 5px rgba(26, 115, 232, 0.4);
+  outline: none;
 }

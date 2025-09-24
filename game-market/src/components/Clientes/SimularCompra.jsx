@@ -1,9 +1,10 @@
+// src/components/Clientes/SimularCompra.jsx
 import { useState } from "react";
 import valid from "card-validator";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
-import "./Clientes.css"
+import { useNavigate } from "react-router-dom";
+import "./Clientes.css";
 
-export default function PaymentForm({ onSuccess }) {
+export default function SimularCompra() {
   const [cardData, setCardData] = useState({
     number: "",
     name: "",
@@ -11,7 +12,7 @@ export default function PaymentForm({ onSuccess }) {
     cvc: "",
   });
 
-  const navigate = useNavigate(); // Inicializar useNavigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCardData({ ...cardData, [e.target.name]: e.target.value });
@@ -28,16 +29,51 @@ export default function PaymentForm({ onSuccess }) {
     if (!expiryValidation.isValid) return alert("Fecha inválida");
     if (!cvcValidation.isValid) return alert("CVC inválido");
 
-    alert("Pago aprobado (solo testing).");
-    if (onSuccess) onSuccess(); // limpia carrito o continúa flujo
+    // ✅ Obtener carrito real
+    const items = JSON.parse(sessionStorage.getItem("carrito")) || [];
+    if (items.length === 0) {
+      alert("El carrito está vacío.");
+      return navigate("/homeClientes");
+    }
 
-    // Redirigir al Home después de un pago exitoso
-    navigate("/"); // Redirige a la ruta '/' (Home)
+    // Calcular totales
+    const subtotal = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const shipping = 0;
+    const total = subtotal + shipping;
+    const orderId = "GM-" + Date.now().toString().slice(-8);
+
+    // ✅ Limpiar carrito después del pago
+    sessionStorage.removeItem("carrito");
+
+    // Redirigir al comprobante
+    navigate("/comprobante", {
+      state: {
+        orderId,
+        date: new Date().toLocaleString(),
+        items: items.map((i) => ({
+          id: i.game_id,
+          title: i.nombre,
+          qty: i.cantidad,
+          price: i.precio,
+        })),
+        subtotal,
+        shipping,
+        total,
+        cardLast4: cardData.number.slice(-4),
+        cardName: cardData.name,
+      },
+    });
   };
-  const home = ()=>{navigate("/homeClientes");}
+
+  const home = () => {
+    navigate("/homeClientes");
+  };
+
   return (
     <div className="payment-form">
-      <button class="botonI" onClick={home}>Volver al home</button>
+      <button className="botonI" onClick={home}>
+        Volver al home
+      </button>
       <h2>Datos de la tarjeta</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -72,7 +108,9 @@ export default function PaymentForm({ onSuccess }) {
           onChange={handleChange}
           required
         />
-        <button class="botonI" type="submit">Confirmar Pago</button>
+        <button className="botonI" type="submit">
+          Confirmar Pago
+        </button>
       </form>
     </div>
   );

@@ -11,6 +11,7 @@ import SimularCompra from "./components/Clientes/SimularCompra.jsx";
 import { useAuth } from "./context/AuthContext";
 import { Clientes } from "./components/Clientes/Clientes.jsx";
 import { Carrito } from "./components/Clientes/Carrito.jsx";
+import Comprobante from "./components/Clientes/Comprobante.jsx"; // ✅ nuevo
 
 function App() {
   const { isAdmin } = useAuth();
@@ -39,6 +40,9 @@ function App() {
 
       {/* Formulario de pago (Simular compra) */}
       <Route path="/simular-compra" element={<SimularCompra />} />
+
+      {/* ✅ Nueva ruta: comprobante de compra */}
+      <Route path="/comprobante" element={<Comprobante />} />
     </Routes>
   );
 }

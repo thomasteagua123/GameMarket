@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; 
+import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 function Login() {
@@ -21,14 +21,14 @@ function Login() {
       login(email);
       setMessage("¡Login exitoso!");
       setTimeout(() => navigate("/"), 1500);
-    } 
+    }
     // Validación para clientes (ejemplo: cualquier otro email con su contraseña correcta)
     else if (email !== admin && password.trim() !== "") {
       // Aquí podrías hacer validación real contra tu base de datos o lista de usuarios
       login(email);
       setMessage("¡Login exitoso!");
       setTimeout(() => navigate("/homeClientes"), 1500);
-    } 
+    }
     // En caso de datos incorrectos
     else {
       setMessage("Correo o contraseña incorrectos");
@@ -46,7 +46,7 @@ function Login() {
             <span className="icon">👤</span>
             <input
               type="email"
-              placeholder="Username"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email"

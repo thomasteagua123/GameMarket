@@ -18,12 +18,12 @@ function Register() {
 
     try {
       const response = await fetch("http://localhost:5000/api/usuarios", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ username, password }),
-});
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
       const data = await response.json();
 
@@ -50,10 +50,10 @@ function Register() {
             <span className="icon">👤</span>
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Email"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              aria-label="Username"
+              aria-label="email"
             />
           </div>
 
