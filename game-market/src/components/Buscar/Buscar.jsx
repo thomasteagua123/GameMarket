@@ -29,7 +29,10 @@ function Buscar() {
         </button>
       </form>
       <div className="buscar-buttons">
-        <button className="registrarse-button" onClick={() => navigate("/register")}>
+        <button
+          className="registrarse-button"
+          onClick={() => navigate("/register")}
+        >
           Registrarse
         </button>
         <button className="logout-button" onClick={() => navigate("/logout")}>

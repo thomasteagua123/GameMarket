@@ -1,3 +1,4 @@
+/* Estilos base (tus existentes) */
 body {
   font-family: "Poppins", sans-serif;
   background: #f8f9fa;
@@ -8,16 +9,16 @@ body {
 /* Barra superior */
 .header {
   display: flex;
-  justify-content: space-between; /* sigue separando */
+  justify-content: space-between;
   align-items: center;
   padding: 0.8rem 1.5rem;
-  background: #2a9df4; /* celeste */
-  color: white;
+  background: #2a9df4;
+  color: black;
   position: sticky;
   top: 0;
   z-index: 1000;
   border-bottom: 2px solid #1e81ce;
-  flex-direction: row-reverse; /* 👈 invierte orden: botón primero */
+  flex-direction: row-reverse;
 }
 
 .header h1 {
@@ -41,61 +42,20 @@ body {
   background: #1661a9;
 }
 
-/* Layout principal: sidebar + contenido */
+/* Layout */
 .catalogo {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 1fr; /* Solo contenido, ocultamos sidebar */
   gap: 2rem;
   padding: 1rem 2rem;
 }
 
-/* Sidebar de categorías */
+/* Sidebar oculto */
 .sidebar {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: none !important;
 }
 
-.sidebar h3 {
-  margin-bottom: 1rem;
-  color: #2a5298;
-  font-size: 1.2rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.5rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar li {
-  padding: 0.5rem 0;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.sidebar li:hover {
-  color: #2a5298;
-  font-weight: bold;
-}
-
-.botonA {
-  background-color: #1e81ce;
-  color: white;
-}
-
-/* Título */
-.title {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #2a5298;
-}
-
-/* Grid de juegos */
+/* Grid juegos*/
 .games-grid {
   list-style: none;
   display: grid;
@@ -108,7 +68,7 @@ body {
 .games-grid li {
   background: #fff;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 0.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-size: 0.95rem;
   line-height: 1.4;
@@ -119,34 +79,76 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* 📱 Ajustes para celulares */
+/* Menú desplegable */
+.menu {
+  display: none;
+  position: absolute;
+  top: 56px;
+  right: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  flex-direction: column;
+  width: 240px;
+  z-index: 1001;
+}
+
+.menu.open {
+  display: flex;
+}
+
+.menu-toggle {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 2.4rem;
+  cursor: pointer;
+  color: white;
+  margin-left: auto;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu ul li {
+  margin-bottom: 0.7rem;
+}
+
+.menu ul.account {
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.menu ul li a,
+.menu ul li span,
+.menu ul li button {
+  color: #2977ff;
+  text-decoration: none;
+  font-weight: normal;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.menu ul li a:hover,
+.menu ul li button:hover {
+  text-decoration: underline;
+}
+
+/* Ajuste móvil */
 @media (max-width: 768px) {
-  .catalogo {
-    grid-template-columns: 1fr; /* Sidebar arriba, juegos abajo */
+  .menu {
+    top: 56px;
+    right: 1rem;
+    width: 220px;
   }
-
-  .sidebar {
-    margin-bottom: 1rem;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  .header h1 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .register-btn {
-    align-self: flex-end;
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
-  }
-
-  .games-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  .menu-toggle {
+    margin-left: 0;
   }
 }

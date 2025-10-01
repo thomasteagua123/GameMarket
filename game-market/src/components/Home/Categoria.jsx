@@ -6,7 +6,7 @@ import "./home.css"; // 👈 mismo estilo que Home
 export function Categoria() {
   const { nombre } = useParams();
   const [games, setGames] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/games")
@@ -24,7 +24,9 @@ export function Categoria() {
     <div className="catalogo">
       <main>
         <h2 className="title">Juegos de {nombre}</h2>
-        <button onClick={()=>navigate('/')}>Volver al Home</button>
+        <button onClick={() => navigate("/homeClientes")}>
+          Volver al Home
+        </button>
 
         <ul className="games-grid">
           {games.length > 0 ? (
