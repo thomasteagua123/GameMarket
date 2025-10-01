@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+
+from flask import Flask, jsonify, request, session
 from flask_cors import CORS
 import pymysql.cursors
 import bcrypt  # instalar con: pip install bcrypt
@@ -7,23 +8,13 @@ app = Flask(__name__)
 # Clave secreta para sesiones
 app.config['SECRET_KEY'] = 'mimamamemima123'
 
+
 # 🔧 Habilitar CORS para React
 CORS(
     app,
     resources={r"/*": {"origins": ["http://localhost:5173"]}},
     supports_credentials=True
 )
-# ---------------- PERFIL (verificación de sesión) ---------------- #
-from flask import session
-
-@app.route("/perfil", methods=["GET"])
-def perfil_usuario():
-    # Simulación: si hay usuario en sesión, devolver email
-    email = session.get("user")
-    if email:
-        return jsonify({"email": email})
-    else:
-        return jsonify({"error": "No estás logueado"}), 401
 
 # 🔗 Conexión a la DB con pymysql
 def get_db_connection():
@@ -43,6 +34,27 @@ def home():
     return "Bienvenido a GameMarket"
 
 
+# ---------------- PERFIL (verificación de sesión) ---------------- #
+@app.route("/perfil", methods=["GET"])
+def perfil_usuario():
+    email = session.get("user")
+    if email:
+        # Obtener rol de BD
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT rol FROM usuarios WHERE username=%s", (email,))
+        user = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if user:
+            return jsonify({"email": email, "rol": user["rol"]})
+        else:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+    else:
+        return jsonify({"error": "No estás logueado"}), 401
+
+
 # ---------------- GAMES ---------------- #
 @app.route("/api/games", methods=["GET"])
 def get_games():
@@ -53,6 +65,7 @@ def get_games():
     cursor.close()
     conn.close()
     return jsonify(games)
+
 
 @app.route("/api/clients", methods=["GET"])
 def get_client():
@@ -66,9 +79,7 @@ def get_client():
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
-
     return jsonify(rows)
-
 
 
 # ---------------- REGISTRO ---------------- #
@@ -81,15 +92,14 @@ def register_user():
     if not username or not password:
         return jsonify({"error": "Faltan username o password"}), 400
 
-    # 🔒 Guardar el hash como string
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO usuarios (username, password) VALUES (%s, %s)",
-            (username, hashed_password)
+            "INSERT INTO usuarios (username, password, rol) VALUES (%s, %s, %s)",
+            (username, hashed_password, 'usuario')  # rol por defecto usuario
         )
         conn.commit()
         return jsonify({"message": f"Usuario {username} agregado correctamente"}), 201
@@ -120,15 +130,41 @@ def login_user():
     cursor.close()
     conn.close()
 
-    # ✅ Comparar usando el hash guardado como string
     if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-        # Guardar usuario en sesión para /perfil
         session['user'] = username
-        return jsonify({"success": True, "message": "Login exitoso"})
+        return jsonify({"success": True, "message": "Login exitoso", "rol": user['rol']})
     else:
         return jsonify({"success": False, "message": "Usuario o contraseña incorrectos"}), 401
 
 
-# ---------------- RUN ---------------- #
+@app.route("/logout", methods=["POST"])
+def logout_user():
+    session.pop('user', None)
+    return jsonify({"success": True, "message": "Logout exitoso"})
+
+
+# ---------------- ADMIN ENDPOINT ---------------- #
+@app.route("/admin", methods=["GET"])
+def admin_only():
+    email = session.get("user")
+    if not email:
+        return jsonify({"error": "No autenticado"}), 401
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT rol FROM usuarios WHERE username = %s", (email,))
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if not result:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    if result['rol'] != 'admin':
+        return jsonify({"error": "Acceso denegado"}), 403
+
+    return jsonify({"message": f"Bienvenido admin {email}"}), 200
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

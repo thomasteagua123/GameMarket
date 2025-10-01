@@ -12,6 +12,7 @@ import { useAuth } from "./context/AuthContext";
 import { Clientes } from "./components/Clientes/Clientes.jsx";
 import { Carrito } from "./components/Clientes/Carrito.jsx";
 import Comprobante from "./components/Clientes/Comprobante.jsx"; // ✅ nuevo
+import AdminPanel from "./components/Admin/admin.jsx";
 
 function App() {
   const { isAdmin } = useAuth();
@@ -20,7 +21,7 @@ function App() {
     <Routes>
       {/* Página principal */}
       <Route path="/" element={<Home />} />
-
+      <Route path="/admin" element={<AdminPanel />} />
       {/* Autenticación */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

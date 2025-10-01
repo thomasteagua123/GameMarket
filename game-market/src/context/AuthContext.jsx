@@ -11,13 +11,16 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Verificar si hay sesión activa
+  // flag para indicar si el usuario es admin
+  const isAdmin = user?.rol === "admin";
+
+  // sesión activa y obtener email y rol
   useEffect(() => {
     axios
       .get(`${API_URL}/perfil`, { withCredentials: true })
       .then((res) => {
         if (res.data.email) {
-          setUser({ email: res.data.email });
+          setUser({ email: res.data.email, rol: res.data.rol });
         } else {
           setUser(null);
         }
@@ -25,6 +28,7 @@ export const AuthProvider = ({ children }) => {
       .catch(() => setUser(null));
   }, []);
 
+  // login guarda email + rol
   const login = async (email, password) => {
     try {
       const res = await axios.post(
@@ -33,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
       if (res.data.success) {
-        setUser({ email });
+        setUser({ email, rol: res.data.rol });
         return true;
       }
     } catch (err) {
@@ -65,9 +69,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider value={{ user, isAdmin, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 export default AuthProvider;

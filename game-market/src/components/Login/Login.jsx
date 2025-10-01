@@ -10,27 +10,29 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const admin = "admin123@gmail.com";
+  const admin = "admin1234@gmail.com";
   const contra = "1234";
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Validación del admin
     if (email === admin && password === contra) {
-      login(email, password);
-      setMessage("¡Login exitoso!");
-      setTimeout(() => navigate("/"), 1500);
-    }
-    // Validación para clientes (ejemplo: cualquier otro email con su contraseña correcta)
-    else if (email !== admin && password.trim() !== "") {
-      // Aquí podrías hacer validación real contra tu base de datos o lista de usuarios
-      login(email, password);
-      setMessage("¡Login exitoso!");
-      setTimeout(() => navigate("/homeClientes"), 1500);
-    }
-    // En caso de datos incorrectos
-    else {
+      const success = await login(email, password);
+      if (success) {
+        setMessage("¡Login exitoso!");
+        setTimeout(() => navigate("/"), 1500);
+      } else {
+        setMessage("Error en el login");
+      }
+    } else if (email !== admin && password.trim() !== "") {
+      const success = await login(email, password);
+      if (success) {
+        setMessage("¡Login exitoso!");
+        setTimeout(() => navigate("/homeClientes"), 1500);
+      } else {
+        setMessage("Error en el login");
+      }
+    } else {
       setMessage("Correo o contraseña incorrectos");
     }
   };
