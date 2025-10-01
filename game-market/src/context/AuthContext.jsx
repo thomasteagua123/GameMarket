@@ -1,34 +1,73 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import axios from "axios";
 
-const AuthContext = createContext(null);
+axios.defaults.withCredentials = true;
+const API_URL = "http://localhost:5000";
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  // El correo electrónico de administrador predeterminado
-  const ADMIN_EMAIL = "admin123@gmail.com";
+  // Verificar si hay sesión activa
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/perfil`, { withCredentials: true })
+      .then((res) => {
+        if (res.data.email) {
+          setUser({ email: res.data.email });
+        } else {
+          setUser(null);
+        }
+      })
+      .catch(() => setUser(null));
+  }, []);
 
-  const login = (email) => {
-    setUser({ email });
-    setIsAdmin(email === ADMIN_EMAIL);
+  const login = async (email, password) => {
+    try {
+      const res = await axios.post(
+        `${API_URL}/login`,
+        { username: email, password },
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        setUser({ email });
+        return true;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return false;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
     setUser(null);
-    setIsAdmin(false);
   };
 
-  const value = {
-    user,
-    isAdmin,
-    login,
-    logout,
+  const register = async (email, password) => {
+    try {
+      const res = await axios.post(
+        `${API_URL}/api/usuarios`,
+        { username: email, password },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      return res.status === 201;
+    } catch (err) {
+      alert("Error en register:", err.response?.data || err.message);
+      return false;
+    }
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout, register }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
+export default AuthProvider;

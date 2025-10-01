@@ -4,13 +4,26 @@ import pymysql.cursors
 import bcrypt  # instalar con: pip install bcrypt
 
 app = Flask(__name__)
+# Clave secreta para sesiones
+app.config['SECRET_KEY'] = 'mimamamemima123'
 
 # 🔧 Habilitar CORS para React
 CORS(
     app,
-    resources={r"/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}},
+    resources={r"/*": {"origins": ["http://localhost:5173"]}},
     supports_credentials=True
 )
+# ---------------- PERFIL (verificación de sesión) ---------------- #
+from flask import session
+
+@app.route("/perfil", methods=["GET"])
+def perfil_usuario():
+    # Simulación: si hay usuario en sesión, devolver email
+    email = session.get("user")
+    if email:
+        return jsonify({"email": email})
+    else:
+        return jsonify({"error": "No estás logueado"}), 401
 
 # 🔗 Conexión a la DB con pymysql
 def get_db_connection():
@@ -109,6 +122,8 @@ def login_user():
 
     # ✅ Comparar usando el hash guardado como string
     if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+        # Guardar usuario en sesión para /perfil
+        session['user'] = username
         return jsonify({"success": True, "message": "Login exitoso"})
     else:
         return jsonify({"success": False, "message": "Usuario o contraseña incorrectos"}), 401

@@ -18,14 +18,14 @@ function Login() {
 
     // Validación del admin
     if (email === admin && password === contra) {
-      login(email);
+      login(email, password);
       setMessage("¡Login exitoso!");
       setTimeout(() => navigate("/"), 1500);
     }
     // Validación para clientes (ejemplo: cualquier otro email con su contraseña correcta)
     else if (email !== admin && password.trim() !== "") {
       // Aquí podrías hacer validación real contra tu base de datos o lista de usuarios
-      login(email);
+      login(email, password);
       setMessage("¡Login exitoso!");
       setTimeout(() => navigate("/homeClientes"), 1500);
     }
