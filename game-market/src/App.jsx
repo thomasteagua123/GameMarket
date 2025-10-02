@@ -12,6 +12,7 @@ import { useAuth } from "./context/AuthContext";
 import { Clientes } from "./components/Clientes/Clientes.jsx";
 import { Carrito } from "./components/Clientes/Carrito.jsx";
 import Comprobante from "./components/Clientes/Comprobante.jsx"; // ✅ nuevo
+import { Games } from "./components/Games/Games";
 import AdminPanel from "./components/Admin/admin.jsx";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       {/* Navegación por plataformas y categorías */}
       <Route path="/plataformas" element={<Plataformas />} />
       <Route path="/categoria/:nombre" element={<Categoria />} />
+      <Route path="/games" element={<Games />} />
 
       {/* Panel de administración */}
       {isAdmin && <Route path="/clientes" element={<Clientes />} />}

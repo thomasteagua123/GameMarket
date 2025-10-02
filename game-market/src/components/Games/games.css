@@ -1,0 +1,52 @@
+/* Grid juegos */
+.games-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.games-grid li {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.games-grid li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagen del juego */
+.games-grid img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Contenedor con texto */
+.games-grid div {
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  flex-grow: 1;
+}
+
+.games-grid h3 {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.1rem;
+}
+
+.games-grid p {
+  margin: 0;
+  color: #555;
+}

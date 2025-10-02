@@ -55,29 +55,7 @@ body {
   display: none !important;
 }
 
-/* Grid juegos*/
-.games-grid {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  padding: 0;
-  margin: 0;
-}
 
-.games-grid li {
-  background: #fff;
-  border-radius: 12px;
-  padding: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-size: 0.95rem;
-  line-height: 1.4;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.games-grid li:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
 
 /* Menú desplegable */
 .menu {

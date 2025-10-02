@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { Games } from "../Games/Games";
 import "./home.css";
 
 export function Home() {
@@ -132,17 +133,7 @@ export function Home() {
           </div>
         )}
 
-        <ul className="games-grid">
-          {games.length > 0 ? (
-            games.map((game) => (
-              <li key={game.game_id}>
-                {game.name} - {game.category} (${game.price})
-              </li>
-            ))
-          ) : (
-            <p>No hay juegos disponibles</p>
-          )}
-        </ul>
+        <Games/>
       </main>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { Games } from "../Games/Games";
 import "./home.css";
 
 export function HomeClientes() {
@@ -36,35 +37,6 @@ export function HomeClientes() {
     setFilteredGames(filtered);
   };
 
-  const handleAddToCart = (game) => {
-    let updatedCart;
-
-    const existingItem = cartItems.find(
-      (item) => item.game_id === game.game_id
-    );
-
-    if (existingItem) {
-      updatedCart = cartItems.map((item) =>
-        item.game_id === game.game_id
-          ? { ...item, cantidad: item.cantidad + 1 }
-          : item
-      );
-    } else {
-      updatedCart = [
-        ...cartItems,
-        {
-          game_id: game.game_id,
-          nombre: game.name,
-          precio: game.price,
-          cantidad: 1,
-        },
-      ];
-    }
-
-    sessionStorage.setItem("carrito", JSON.stringify(updatedCart));
-    setCartItems(updatedCart);
-    setCartCount(updatedCart.reduce((sum, item) => sum + item.cantidad, 0));
-  };
 
   const handleLogout = () => {
     logout();
@@ -240,25 +212,7 @@ export function HomeClientes() {
               </Link>
             </div>
           )}
-          <ol className="games-grid">
-            {filteredGames.length > 0 ? (
-              filteredGames.map((game, index) => (
-                <li key={`${game.game_id}-${index}`} className="game-item">
-                  <div>
-                    {game.name} - {game.category} (${game.price})
-                  </div>
-                  <button
-                    className="agregar-btn"
-                    onClick={() => handleAddToCart(game)}
-                  >
-                    Agregar al carrito
-                  </button>
-                </li>
-              ))
-            ) : (
-              <p>No se encontraron juegos que coincidan con la búsqueda.</p>
-            )}
-          </ol>
+          <Games/>
         </main>
       </div>
     </div>
