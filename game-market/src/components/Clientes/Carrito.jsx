@@ -1,7 +1,7 @@
 // src/components/Clientes/Carrito.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "./Carrito.css";
 export function Carrito() {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();

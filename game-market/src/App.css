@@ -2,20 +2,36 @@
   max-width: 1280px;
   margin: 0 auto;
   text-align: center;
-}
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  padding: 2rem 1rem;
+  background: mintcream;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(255, 60, 120, 0.3);
+  color: black;
+  font-family: "Orbitron", "Press Start 2P", sans-serif;
 }
 
+/* Logo con tamaño grande y espacio */
+.logo {
+  height: 7em;
+  padding: 1.5em;
+  will-change: filter, transform;
+  transition: filter 300ms, transform 300ms ease;
+  cursor: pointer;
+}
+
+/* Efecto neón al pasar el mouse por el logo */
+.logo:hover {
+  filter: drop-shadow(0 0 2.5em #ff3c78cc);
+  transform: scale(1.1);
+}
+
+/* Logo específico con un color cyan neón y animación */
+.logo.react:hover {
+  filter: drop-shadow(0 0 3em #22c1c3cc);
+  transform: scale(1.1);
+}
+
+/* Animación de giro continuo para un logo llamativo */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -25,16 +41,36 @@
   }
 }
 
+/* Aplicar spin solo si el usuario prefiere animaciones */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Tarjetas destacadas con relleno y sombra neón */
 .card {
-  padding: 2em;
+  padding: 2.5em;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(255, 60, 120, 0.4);
+  transition: box-shadow 0.3s ease;
+  margin: 1.5rem 0;
+  color: #e0e0e0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  font-family: "Orbitron", sans-serif;
 }
 
+.card:hover {
+  box-shadow: 0 12px 30px rgba(255, 60, 120, 0.7);
+}
+
+/* Texto más tenue para secciones menos importantes */
 .read-the-docs {
-  color: #888;
+  color: #777;
+  font-style: italic;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  margin-top: 1rem;
 }

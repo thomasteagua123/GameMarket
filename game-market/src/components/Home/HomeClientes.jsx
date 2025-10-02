@@ -169,7 +169,21 @@ export function HomeClientes() {
                 <button className="register-btn" onClick={handleLogout}>
                   Cerrar Sesión
                 </button>
-                <button onClick={irAlCarrito}>🛒</button>
+                <button className="carrito-btn" onClick={irAlCarrito}>
+                  <video
+                    src="/carro.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "2px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </button>
               </>
             )}
             {!user && (

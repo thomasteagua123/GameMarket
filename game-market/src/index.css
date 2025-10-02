@@ -1,16 +1,23 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: "Orbitron", "Press Start 2P", system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.4;
+  font-weight: 500;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #2977ff; /* Fondo azul igual a la barra */
+  color: #e0e0e0;
+  background-color: #0d0d1a; /* Fondo oscuro para ambiente gamer */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  --primary-color: #1669c1; /* Rosa vibrante */
+  --secondary-color: #22c1c3; /* Cyan eléctrico */
+  --accent-color: #ffd60a; /* Amarillo neón */
+  --shadow-color: rgba(255, 60, 120, 0.4);
+  --sidebar-bg: #121429;
+  --content-bg: #1a1a33;
 }
 
-/* Elimina todo margen y padding exterior */
+/* Reset básico */
 html,
 body {
   margin: 0;
@@ -20,82 +27,118 @@ body {
   width: 100vw;
   height: 100vh;
   box-sizing: border-box;
-  background: #2977ff; /* Fondo igual a barra */
+  background: var(--primary-color);
+  overflow-x: hidden;
 }
 
-/* Barra azul superior de borde a borde */
+/* Barra azul superior con estilo neón */
 .navbar {
-  background-color: #2977ff;
+  background: linear-gradient(90deg, #ff3c78, #22c1c3);
   color: white;
   width: 100vw;
-  min-height: 56px;
+  min-height: 60px;
   margin: 0;
-  padding: 1rem 2rem;
+  padding: 0 2rem;
   box-sizing: border-box;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 2000;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 0 12px var(--shadow-color);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-/* Contenedor principal SIN bordes blancos, centrado y separado de la barra */
+/* Contenedor principal oscuro con bordes redondeados y sombra */
 .app-container {
   flex-grow: 1;
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 2rem 1rem 1rem 1rem;
-  margin-top: 72px; /* igual o mayor a la altura del navbar */
+  max-width: 1400px;
+  margin: 80px auto 0 auto; /* Considera la altura del navbar */
+  padding: 2rem 2rem 3rem 2rem;
   box-sizing: border-box;
-  background: #f7f8fa; /* Fondo del contenido */
-  border-radius: 0; /* Sin radio */
+  background: var(--content-bg);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  color: #e0e0e0;
+  transition: background 0.3s ease;
 }
 
-/* Sidebar */
+/* Sidebar con estilo futurista y neón */
 .sidebar {
-  width: 220px;
-  min-width: 180px;
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 2rem 0;
-  margin-right: 2rem;
-  box-shadow: 0 2px 8px rgba(160, 180, 210, 0.1);
+  width: 250px;
+  min-width: 200px;
+  background: var(--sidebar-bg);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  margin-right: 3rem;
+  box-shadow: 0 0 15px var(--secondary-color);
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--accent-color);
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-/* Otros estilos de contenido... */
+.sidebar:hover {
+  box-shadow: 0 0 25px var(--primary-color);
+}
 
-/* Para mobile, asegurar que no haya espacios extras */
+/* Botones y elementos interactivos */
+button,
+.btn {
+  background: var(--primary-color);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+button:hover,
+.btn:hover {
+  background: var(--secondary-color);
+  box-shadow: 0 0 20px var(--secondary-color);
+  color: #fff;
+}
+
+/* Ajustes responsivos */
 @media (max-width: 900px) {
   .app-container {
     flex-direction: column;
     align-items: center;
-    padding: 1rem 0.1rem 0.7rem 0.1rem;
-    margin-top: 56px;
+    padding: 1rem 1rem 2rem 1rem;
+    margin-top: 70px;
   }
   .sidebar {
     width: 100%;
     margin-right: 0;
     margin-bottom: 2rem;
-    border-radius: 0;
-    padding: 1rem 0;
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .navbar {
-    padding: 1rem 0.5rem;
-    min-height: 48px;
+    padding: 1rem;
+    min-height: 50px;
+    font-size: 1rem;
   }
   .app-container {
-    padding: 0.5rem 0.2rem 0.6rem 0.2rem;
-    margin-top: 48px;
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+    margin-top: 50px;
   }
 }
