@@ -114,7 +114,7 @@ export function Home() {
                 className="register-btn"
                 onClick={() => navigate("/login")}
               >
-                Registrarse
+                inicio sesiòn
               </button>
             )}
           </>

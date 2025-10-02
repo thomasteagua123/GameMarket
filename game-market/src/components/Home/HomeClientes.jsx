@@ -166,9 +166,6 @@ export function HomeClientes() {
                   onChange={handleSearch}
                   className="buscar-input"
                 />
-                <button className="register-btn" onClick={handleLogout}>
-                  Cerrar Sesión
-                </button>
                 <button className="carrito-btn" onClick={irAlCarrito}>
                   <video
                     src="/carro.mp4"
