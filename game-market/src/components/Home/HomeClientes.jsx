@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Games } from "../Games/Games";
+import { useGames } from "../../hooks/useGames";
 import "./home.css";
 
 export function HomeClientes() {
@@ -10,7 +11,15 @@ export function HomeClientes() {
   const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, isAdmin, logout } = useAuth();
+  const { user, logout } = useAuth();
+
+  // ✅ obtenemos todos los juegos desde el hook
+  const games = useGames();
+
+  // Al cargar, mostrar todos los juegos por defecto
+  useEffect(() => {
+    setFilteredGames(games);
+  }, [games]);
 
   // Cargar carrito desde sessionStorage
   useEffect(() => {
@@ -21,27 +30,11 @@ export function HomeClientes() {
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
-    // const allGames = [
-    //   { id: 1, nombre: "Among Us", categoria: "Party", precio: 2200 },
-    //   { id: 2, nombre: "Call of Duty Modern Warfare II", categoria: "Shooter", precio: 2300 },
-    //   { id: 3, nombre: "EA FC24", categoria: "Deportes", precio: 2300 },
-    //   { id: 4, nombre: "Elden Ring", categoria: "RPG", precio: 2300 },
-    //   { id: 5, nombre: "God of War III", categoria: "Acción", precio: 2100 },
-    //   { id: 6, nombre: "Hollow Knight", categoria: "Aventura", precio: 2100 },
-    //   { id: 7, nombre: "Hollow Knight Silksong first", categoria: "Aventura", precio: 2100 },
-    //   { id: 8, nombre: "Logo of Stardew Valley", categoria: "Estrategia", precio: 2100 },
-    //   { id: 9, nombre: "Minecraft", categoria: "Sandbox", precio: 1800 },
-    //   { id: 10, nombre: "Mortal Kombat 1", categoria: "Lucha", precio: 1800 },
-    //   { id: 11, nombre: "Party Hard", categoria: "Indie", precio: 1800 },
-    //   { id: 12, nombre: "The Legend of Zelda Breath of the Wild", categoria: "Aventura", precio: 3500 },
-    // ];
-
-    const filtered = allGames.filter(
+    const filtered = games.filter(
       (game) =>
         game.nombre.toLowerCase().includes(term) ||
         game.categoria.toLowerCase().includes(term)
     );
-
     setFilteredGames(filtered);
   };
 
@@ -51,10 +44,15 @@ export function HomeClientes() {
 
     if (existing) {
       updatedCart = cartItems.map((item) =>
-        item.game_id === game.id ? { ...item, cantidad: item.cantidad + 1 } : item
+        item.game_id === game.id
+          ? { ...item, cantidad: item.cantidad + 1 }
+          : item
       );
     } else {
-      updatedCart = [...cartItems, { game_id: game.id, nombre: game.nombre, precio: game.precio, cantidad: 1 }];
+      updatedCart = [
+        ...cartItems,
+        { game_id: game.id, nombre: game.nombre, precio: game.precio, cantidad: 1 },
+      ];
     }
 
     sessionStorage.setItem("carrito", JSON.stringify(updatedCart));
@@ -112,22 +110,23 @@ export function HomeClientes() {
               onChange={handleSearch}
               className="buscar-input"
             />
+            <p className="p">Carrito: {cartCount}</p>
             {user && (
-             <button className="carrito-btn" onClick={irAlCarrito}>
-                  <video
-                    src="/carro.mp4"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "2px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </button>
+              <button className="carrito-btn" onClick={irAlCarrito}>
+                <video
+                  src="/carro.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "2px",
+                    cursor: "pointer",
+                  }}
+                />
+              </button>
             )}
           </>
         )}
@@ -135,6 +134,7 @@ export function HomeClientes() {
 
       <main>
         <h2 className="title">Lista de Juegos</h2>
+        {/* ✅ Pasamos filteredGames al componente Games */}
         <Games filteredGames={filteredGames} handleAddToCart={handleAddToCart} />
       </main>
     </div>

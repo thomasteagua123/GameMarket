@@ -102,6 +102,33 @@ body {
   margin-top: 1rem;
 }
 
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.buscar-input {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s;
+  
+  margin-left: 10px; /* Esto empuja la barra hacia la derecha */
+}
+
+.buscar-input:focus {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.p{
+  
+  margin-left: 10px;
+}
+
+
+
 .menu ul li a,
 .menu ul li span,
 .menu ul li button {
