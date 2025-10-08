@@ -21,20 +21,20 @@ export function HomeClientes() {
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
-    const allGames = [
-      { id: 1, nombre: "Among Us", categoria: "Party", precio: 2200 },
-      { id: 2, nombre: "Call of Duty Modern Warfare II", categoria: "Shooter", precio: 2300 },
-      { id: 3, nombre: "EA FC24", categoria: "Deportes", precio: 2300 },
-      { id: 4, nombre: "Elden Ring", categoria: "RPG", precio: 2300 },
-      { id: 5, nombre: "God of War III", categoria: "Acción", precio: 2100 },
-      { id: 6, nombre: "Hollow Knight", categoria: "Aventura", precio: 2100 },
-      { id: 7, nombre: "Hollow Knight Silksong first", categoria: "Aventura", precio: 2100 },
-      { id: 8, nombre: "Logo of Stardew Valley", categoria: "Estrategia", precio: 2100 },
-      { id: 9, nombre: "Minecraft", categoria: "Sandbox", precio: 1800 },
-      { id: 10, nombre: "Mortal Kombat 1", categoria: "Lucha", precio: 1800 },
-      { id: 11, nombre: "Party Hard", categoria: "Indie", precio: 1800 },
-      { id: 12, nombre: "The Legend of Zelda Breath of the Wild", categoria: "Aventura", precio: 3500 },
-    ];
+    // const allGames = [
+    //   { id: 1, nombre: "Among Us", categoria: "Party", precio: 2200 },
+    //   { id: 2, nombre: "Call of Duty Modern Warfare II", categoria: "Shooter", precio: 2300 },
+    //   { id: 3, nombre: "EA FC24", categoria: "Deportes", precio: 2300 },
+    //   { id: 4, nombre: "Elden Ring", categoria: "RPG", precio: 2300 },
+    //   { id: 5, nombre: "God of War III", categoria: "Acción", precio: 2100 },
+    //   { id: 6, nombre: "Hollow Knight", categoria: "Aventura", precio: 2100 },
+    //   { id: 7, nombre: "Hollow Knight Silksong first", categoria: "Aventura", precio: 2100 },
+    //   { id: 8, nombre: "Logo of Stardew Valley", categoria: "Estrategia", precio: 2100 },
+    //   { id: 9, nombre: "Minecraft", categoria: "Sandbox", precio: 1800 },
+    //   { id: 10, nombre: "Mortal Kombat 1", categoria: "Lucha", precio: 1800 },
+    //   { id: 11, nombre: "Party Hard", categoria: "Indie", precio: 1800 },
+    //   { id: 12, nombre: "The Legend of Zelda Breath of the Wild", categoria: "Aventura", precio: 3500 },
+    // ];
 
     const filtered = allGames.filter(
       (game) =>
