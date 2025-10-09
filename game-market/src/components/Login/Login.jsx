@@ -7,6 +7,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // 👈 nuevo estado para animación
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -22,30 +23,46 @@ function Login() {
     }
 
     try {
-      // Si es admin
-      if (username === adminUser && password === adminPass) {
-        const success = await login(username, password);
-        if (success) {
-          setMessage("¡Login exitoso como admin!");
-          setTimeout(() => navigate("/"), 1500);
-        } else {
-          setMessage("Error en el login");
-        }
+      const success = await login(username, password);
+
+      if (success) {
+        setMessage("¡Login exitoso!");
+        setLoading(true); // 👈 mostrar animación
+        // después de 3.5 segundos redirige al home correspondiente
+        setTimeout(() => {
+          if (username === adminUser && password === adminPass) {
+            navigate("/");
+          } else {
+            navigate("/homeClientes");
+          }
+        }, 3500);
       } else {
-        // Usuario normal
-        const success = await login(username, password);
-        if (success) {
-          setMessage("¡Login exitoso!");
-          setTimeout(() => navigate("/homeClientes"), 1500);
-        } else {
-          setMessage("Usuario o contraseña incorrectos");
-        }
+        setMessage("Usuario o contraseña incorrectos");
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
       setMessage("Error de conexión con el servidor");
     }
   };
+
+  // 👇 si está cargando, muestra la animación
+  if (loading) {
+   return (
+      <div className="loading-screen">
+        <video
+          src="/animaciondeinicio.mp4"
+          autoPlay
+          muted
+          playsInline
+          style={{
+            width: "500px",
+            height: "500px",
+            objectFit: " center",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">

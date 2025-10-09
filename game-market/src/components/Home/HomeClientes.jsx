@@ -10,18 +10,21 @@ export function HomeClientes() {
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // 👈 Nuevo estado
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-
-  // ✅ obtenemos todos los juegos desde el hook
   const games = useGames();
 
-  // Al cargar, mostrar todos los juegos por defecto
+  // Animación de carga
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 3500); // 3.5s de animación
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     setFilteredGames(games);
   }, [games]);
 
-  // Cargar carrito desde sessionStorage
   useEffect(() => {
     const storedCart = JSON.parse(sessionStorage.getItem("carrito")) || [];
     setCartItems(storedCart);
@@ -68,6 +71,25 @@ export function HomeClientes() {
   const irAlCarrito = () => {
     navigate("/carrito");
   };
+
+  // 👇 Si está cargando, muestra la animación
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <video
+          src="/animaciondeinicio.mp4"
+          autoPlay
+          muted
+          playsInline
+          style={{
+            width: "500px",
+            height: "500px",
+            objectFit: " center",
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -134,7 +156,6 @@ export function HomeClientes() {
 
       <main>
         <h2 className="title">Lista de Juegos</h2>
-        {/* ✅ Pasamos filteredGames al componente Games */}
         <Games filteredGames={filteredGames} handleAddToCart={handleAddToCart} />
       </main>
     </div>
