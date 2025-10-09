@@ -86,11 +86,12 @@ def get_client():
 @app.route('/api/usuarios', methods=['POST'])
 def register_user():
     data = request.get_json()
+    email = data.get("email")
     username = data.get("username")
     password = data.get("password")
 
-    if not username or not password:
-        return jsonify({"error": "Faltan username o password"}), 400
+    if not email or not username or not password:
+        return jsonify({"error": "Faltan email, username o password"}), 400
 
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
@@ -98,8 +99,8 @@ def register_user():
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO usuarios (username, password, rol) VALUES (%s, %s, %s)",
-            (username, hashed_password, 'usuario')  # rol por defecto usuario
+            "INSERT INTO usuarios (email, username, password, rol) VALUES (%s, %s, %s, %s)",
+            (email, username, hashed_password, 'usuario')  # rol por defecto usuario
         )
         conn.commit()
         return jsonify({"message": f"Usuario {username} agregado correctamente"}), 201
@@ -108,6 +109,7 @@ def register_user():
     finally:
         cursor.close()
         conn.close()
+
 
 
 # ---------------- LOGIN ---------------- #

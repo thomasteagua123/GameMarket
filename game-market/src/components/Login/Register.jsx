@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"; // puedes usar el mismo CSS
+import "./Login.css";
 
 function Register() {
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,25 +12,23 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (!username || !password) {
-      setMessage("Debes ingresar usuario y contraseña");
+    if (!email || !username || !password) {
+      setMessage("Debes ingresar email, usuario y contraseña");
       return;
     }
 
     try {
       const response = await fetch("http://localhost:5000/api/usuarios", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, username, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(data.message); // Usuario agregado correctamente
-        setTimeout(() => navigate("/login"), 1500); // después de 1.5s vuelve al login
+        setMessage(data.message);
+        setTimeout(() => navigate("/login"), 1500);
       } else {
         setMessage(data.error || "Error al registrar usuario");
       }
@@ -47,13 +46,24 @@ function Register() {
 
         <form className="login-form" onSubmit={handleRegister}>
           <div className="input-group">
+            <span className="icon">📧</span>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              aria-label="Email"
+            />
+          </div>
+
+          <div className="input-group">
             <span className="icon">👤</span>
             <input
               type="text"
-              placeholder="Email"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              aria-label="email"
+              aria-label="Username"
             />
           </div>
 
