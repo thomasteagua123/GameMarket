@@ -27,14 +27,15 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(data.message);
+        setMessage(data.message || "Usuario registrado correctamente ✅");
+        // redirige al login luego de 1.5 segundos
         setTimeout(() => navigate("/login"), 1500);
       } else {
-        setMessage(data.error || "Error al registrar usuario");
+        setMessage(data.error || "Error al registrar usuario ❌");
       }
     } catch (error) {
       console.error("Error de conexión:", error);
-      setMessage("No se pudo conectar con el servidor");
+      setMessage("No se pudo conectar con el servidor ❌");
     }
   };
 
@@ -53,6 +54,7 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email"
+              required
             />
           </div>
 
@@ -64,6 +66,7 @@ function Register() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               aria-label="Username"
+              required
             />
           </div>
 
@@ -75,6 +78,7 @@ function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               aria-label="Password"
+              required
             />
           </div>
 

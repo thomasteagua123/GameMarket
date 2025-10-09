@@ -1,31 +1,32 @@
+// src/components/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const admin = "admin1234@gmail.com";
+  const admin = "admin"; // ahora el admin puede logearse con username
   const contra = "1234";
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (email === admin && password === contra) {
-      const success = await login(email, password);
+    if (username === admin && password === contra) {
+      const success = await login(username, password);
       if (success) {
         setMessage("¡Login exitoso!");
         setTimeout(() => navigate("/"), 1500);
       } else {
         setMessage("Error en el login");
       }
-    } else if (email !== admin && password.trim() !== "") {
-      const success = await login(email, password);
+    } else if (username.trim() !== "" && password.trim() !== "") {
+      const success = await login(username, password);
       if (success) {
         setMessage("¡Login exitoso!");
         setTimeout(() => navigate("/homeClientes"), 1500);
@@ -33,7 +34,7 @@ function Login() {
         setMessage("Error en el login");
       }
     } else {
-      setMessage("Correo o contraseña incorrectos");
+      setMessage("Usuario o contraseña incorrectos");
     }
   };
 
@@ -47,11 +48,11 @@ function Login() {
           <div className="input-group">
             <span className="icon">👤</span>
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-label="Email"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              aria-label="Username"
               required
             />
           </div>

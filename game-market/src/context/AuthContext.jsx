@@ -1,3 +1,4 @@
+// src/context/AuthContext.jsx
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
@@ -5,22 +6,20 @@ axios.defaults.withCredentials = true;
 const API_URL = "http://localhost:5000";
 
 export const AuthContext = createContext();
-
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // flag para indicar si el usuario es admin
   const isAdmin = user?.rol === "admin";
 
-  // sesión activa y obtener email y rol
+  // Verificar sesión activa
   useEffect(() => {
     axios
       .get(`${API_URL}/perfil`, { withCredentials: true })
       .then((res) => {
-        if (res.data.email) {
-          setUser({ email: res.data.email, rol: res.data.rol });
+        if (res.data.username) {
+          setUser({ username: res.data.username, rol: res.data.rol });
         } else {
           setUser(null);
         }
@@ -28,16 +27,16 @@ export const AuthProvider = ({ children }) => {
       .catch(() => setUser(null));
   }, []);
 
-  // login guarda email + rol
-  const login = async (email, password) => {
+  // LOGIN usando username
+  const login = async (username, password) => {
     try {
       const res = await axios.post(
         `${API_URL}/login`,
-        { username: email, password },
+        { username, password },
         { withCredentials: true }
       );
       if (res.data.success) {
-        setUser({ email, rol: res.data.rol });
+        setUser({ username, rol: res.data.rol });
         return true;
       }
     } catch (err) {
@@ -51,11 +50,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const register = async (email, password) => {
+  // REGISTER (si querés agregar email, se puede ajustar después)
+  const register = async (username, password) => {
     try {
       const res = await axios.post(
         `${API_URL}/api/usuarios`,
-        { username: email, password },
+        { username, password },
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
