@@ -1,4 +1,3 @@
-// src/components/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -11,30 +10,40 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const admin = "admin"; // ahora el admin puede logearse con username
-  const contra = "1234";
+  const adminUser = "admin";
+  const adminPass = "1234";
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (username === admin && password === contra) {
-      const success = await login(username, password);
-      if (success) {
-        setMessage("¡Login exitoso!");
-        setTimeout(() => navigate("/"), 1500);
+    if (!username || !password) {
+      setMessage("Debes ingresar usuario y contraseña");
+      return;
+    }
+
+    try {
+      // Si es admin
+      if (username === adminUser && password === adminPass) {
+        const success = await login(username, password);
+        if (success) {
+          setMessage("¡Login exitoso como admin!");
+          setTimeout(() => navigate("/"), 1500);
+        } else {
+          setMessage("Error en el login");
+        }
       } else {
-        setMessage("Error en el login");
+        // Usuario normal
+        const success = await login(username, password);
+        if (success) {
+          setMessage("¡Login exitoso!");
+          setTimeout(() => navigate("/homeClientes"), 1500);
+        } else {
+          setMessage("Usuario o contraseña incorrectos");
+        }
       }
-    } else if (username.trim() !== "" && password.trim() !== "") {
-      const success = await login(username, password);
-      if (success) {
-        setMessage("¡Login exitoso!");
-        setTimeout(() => navigate("/homeClientes"), 1500);
-      } else {
-        setMessage("Error en el login");
-      }
-    } else {
-      setMessage("Usuario o contraseña incorrectos");
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      setMessage("Error de conexión con el servidor");
     }
   };
 
@@ -68,14 +77,6 @@ function Login() {
               required
             />
           </div>
-
-          <a
-            onClick={() => navigate("/forgot-password")}
-            className="forgot-password"
-            style={{ cursor: "pointer" }}
-          >
-            Forgot password?
-          </a>
 
           <button type="submit" className="login-button">
             Login

@@ -1,4 +1,3 @@
-// src/components/Clientes/SimularCompra.jsx
 import { useState } from "react";
 import valid from "card-validator";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,7 @@ export default function SimularCompra() {
     setCardData({ ...cardData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const numberValidation = valid.number(cardData.number);
@@ -29,29 +28,59 @@ export default function SimularCompra() {
     if (!expiryValidation.isValid) return alert("Fecha inválida");
     if (!cvcValidation.isValid) return alert("CVC inválido");
 
-    // ✅ Obtener carrito real
     const items = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+    // Depuración - ver toda la estructura del carrito
+    console.log("CARRITO COMPLETO:", items);
+    if (items.length > 0) {
+      console.log("PRIMER ITEM:", items[0]);
+    }
+
     if (items.length === 0) {
       alert("El carrito está vacío.");
       return navigate("/homeClientes");
     }
 
-    // Calcular totales
     const subtotal = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
     const shipping = 0;
     const total = subtotal + shipping;
     const orderId = "GM-" + Date.now().toString().slice(-8);
 
-    // ✅ Limpiar carrito después del pago
+    try {
+      for (const item of items) {
+        // Debe ser el id del juego verdadero de la base
+        let juegoId = item.game_id !== undefined ? item.game_id : item.id;
+
+        console.log("Enviando compra a backend:", {
+          first_name: cardData.name.split(" ")[0],
+          last_name: cardData.name.split(" ").slice(1).join(" "),
+          game_id: juegoId,
+        });
+
+        await fetch("http://localhost:5000/api/clients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            first_name: cardData.name.split(" ")[0],
+            last_name: cardData.name.split(" ").slice(1).join(" "),
+            game_id: juegoId,
+          }),
+          credentials: "include",
+        });
+      }
+    } catch (error) {
+      alert("Error al registrar la compra: " + error.message);
+      return;
+    }
+
     sessionStorage.removeItem("carrito");
 
-    // Redirigir al comprobante
     navigate("/comprobante", {
       state: {
         orderId,
         date: new Date().toLocaleString(),
         items: items.map((i) => ({
-          id: i.game_id,
+          id: i.game_id !== undefined ? i.game_id : i.id,
           title: i.nombre,
           qty: i.cantidad,
           price: i.precio,
