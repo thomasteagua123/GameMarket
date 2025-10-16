@@ -97,27 +97,43 @@ def get_clients():
 @app.route("/api/clients", methods=["POST"])
 def add_client():
     data = request.get_json()
-    print("RECIBIENDO EN BACKEND:", data)   # Depuración: revisa los datos recibidos
+    print("📦 Datos recibidos en /api/clients:", data)
+
     first_name = data.get("first_name")
     last_name = data.get("last_name")
     game_id = data.get("game_id")
-    print("first_name:", first_name, "last_name:", last_name, "game_id:", game_id)
-    # El resto igual ...
+    payment_method = data.get("payment_method")  # ✅ llega desde el frontend
 
-    if not first_name or not last_name or not game_id:
+    if not first_name or not last_name or not game_id or not payment_method:
+        print("⚠️ Faltan datos:", first_name, last_name, game_id, payment_method)
         return jsonify({"error": "Faltan datos"}), 400
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+
+        # ✅ Insertar cliente
         cursor.execute(
             "INSERT INTO client (first_name, last_name, game_id) VALUES (%s, %s, %s)",
             (first_name, last_name, game_id)
         )
+        client_id = cursor.lastrowid
+
+        # ✅ Insertar compra con método de pago
+        cursor.execute(
+            "INSERT INTO buys (client_id, game_id, payment_method) VALUES (%s, %s, %s)",
+            (client_id, game_id, payment_method)
+        )
+
         conn.commit()
+        print(f"✅ Compra registrada: {first_name} {last_name} - {payment_method}")
+
         return jsonify({"message": "Compra registrada correctamente"}), 201
+
     except Exception as err:
+        print("❌ Error al registrar compra:", err)
         return jsonify({"error": f"Error de DB: {err}"}), 500
+
     finally:
         cursor.close()
         conn.close()

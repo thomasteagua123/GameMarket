@@ -30,16 +30,15 @@ export default function SimularCompra() {
 
     const items = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
-    // Depuración - ver toda la estructura del carrito
-    console.log("CARRITO COMPLETO:", items);
-    if (items.length > 0) {
-      console.log("PRIMER ITEM:", items[0]);
-    }
-
     if (items.length === 0) {
       alert("El carrito está vacío.");
       return navigate("/homeClientes");
     }
+
+    // ✅ Detectar tipo de tarjeta automáticamente
+    const paymentMethod = numberValidation.card
+      ? numberValidation.card.niceType
+      : "Desconocida";
 
     const subtotal = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
     const shipping = 0;
@@ -48,13 +47,13 @@ export default function SimularCompra() {
 
     try {
       for (const item of items) {
-        // Debe ser el id del juego verdadero de la base
         let juegoId = item.game_id !== undefined ? item.game_id : item.id;
 
         console.log("Enviando compra a backend:", {
           first_name: cardData.name.split(" ")[0],
           last_name: cardData.name.split(" ").slice(1).join(" "),
           game_id: juegoId,
+          payment_method: paymentMethod, // ✅ agregado
         });
 
         await fetch("http://localhost:5000/api/clients", {
@@ -64,10 +63,13 @@ export default function SimularCompra() {
             first_name: cardData.name.split(" ")[0],
             last_name: cardData.name.split(" ").slice(1).join(" "),
             game_id: juegoId,
+            payment_method: paymentMethod, // ✅ ahora se envía al backend
           }),
           credentials: "include",
         });
       }
+
+      alert("Compra registrada con éxito 💳");
     } catch (error) {
       alert("Error al registrar la compra: " + error.message);
       return;
@@ -90,6 +92,7 @@ export default function SimularCompra() {
         total,
         cardLast4: cardData.number.slice(-4),
         cardName: cardData.name,
+        paymentMethod, // ✅ para mostrarlo en el comprobante
       },
     });
   };
