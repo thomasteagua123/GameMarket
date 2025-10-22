@@ -3,6 +3,7 @@
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-rows: auto;
   gap: 1rem;
   padding: 0;
   margin: 0;
@@ -21,8 +22,6 @@
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  /* Altura mínima para asegurar que todas las tarjetas se vean uniformes */
-  min-height: 400px; 
 }
 
 .games-grid li:hover {
@@ -32,11 +31,12 @@
 
 /* Imagen del juego */
 .games-grid img {
+  aspect-ratio: 3 / 4; /* Mantiene una proporción consistente */
 
-  object-fit: contain; 
+  object-fit: cover;
   /* Asegura que la imagen esté centrada en su espacio */
-  object-position: center; 
-  
+  object-position: center;
+  width: 100%;
   background-color: #f9f9f9;
   border-radius: 12px 12px 0 0;
   margin-bottom: 0.5rem;
@@ -48,21 +48,21 @@
   flex-grow: 1;
   text-align: center;
   /* ⭐️ CLAVE para la animación: Oculta el texto cuando sale de la caja */
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 /* Título */
 .games-grid h3 {
   /* ⭐️ CLAVE para la animación: Desactiva el truncamiento '...' */
-  text-overflow: clip; 
+  text-overflow: clip;
   /* Asegura que el título quede en una sola línea */
   white-space: nowrap;
-  
+
   /* ⭐️ CLAVE para la animación: Aplica el movimiento */
-  animation: scroll-text 15s linear infinite; 
-  
+  animation: scroll-text 15s linear infinite;
+
   /* Estilos de fuente ajustados */
-  font-size: 1rem; 
+  font-size: 1rem;
   text-align: left; /* Para que la animación comience de izquierda a derecha */
   margin: 0 0 0.3rem 0;
   color: #222;
@@ -91,6 +91,13 @@
 .agregar-btn:hover {
   background: #1e81ce;
   transform: scale(1.05);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 0.5rem;
 }
 
 /* ------------------------------------------------ */

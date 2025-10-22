@@ -309,7 +309,6 @@ export function Games({ filteredGames = [], handleAddToCart }) {
                 "https://via.placeholder.com/200x250?text=Sin+imagen"
               }
               alt={game.nombre}
-              className="game-img"
             />
             <div className="game-info">
               <h3 className="game-title">{game.nombre}</h3>
