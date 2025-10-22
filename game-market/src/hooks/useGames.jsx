@@ -13,7 +13,7 @@ const gamesData = [
   { id: 10, nombre: "Mortal Kombat 1", categoria: "Lucha", precio: 1800, img: "https://res.cloudinary.com/dlttzxwmj/image/upload/v1759932259/Mortal_Kombat_1_portada_qp4dnq.jpg" },
   { id: 11, nombre: "Party Hard", categoria: "Indie", precio: 1800, img: "https://res.cloudinary.com/dlttzxwmj/image/upload/v1759932259/Party_Hard-portada_ws3kfp.jpg" },
   { id: 12, nombre: "The Legend of Zelda Breath of the Wild", categoria: "Aventura", precio: 3500, img: "https://res.cloudinary.com/dlttzxwmj/image/upload/v1759932259/The_Legend_of_Zelda_Breath_of_the_Wild-portada_gunk0g.jpg" },{ id: 13, nombre: "Grand Theft Auto V", categoria: "Acción / Mundo abierto", precio: 3500, img: "https://www.xtrafondos.com/wallpapers/los-santos-gta-v-5112.jpg" },
-{ id: 14, nombre: "Spider-Man", categoria: "Aventura", precio: 3300, img: "https://www.xtrafondos.com/wallpapers/spider-man-ps4-5840.jpg" },
+{ id: 14, nombre: "Spider-Man", categoria: "Aventura", precio: 3300, img: "./Spiderman.jpg" },
 { id: 15, nombre: "Cyberpunk 2077", categoria: "RPG / Acción", precio: 3200, img: "https://www.xtrafondos.com/wallpapers/cyberpunk-2077-5616.jpg" },
 { id: 16, nombre: "League of Legends", categoria: "MOBA / Estrategia", precio: 2500, img: "https://www.xtrafondos.com/wallpapers/league-of-legends-logo-5969.jpg" },
 { id: 17, nombre: "Valorant", categoria: "Shooter / Táctico", precio: 2200, img: "https://www.xtrafondos.com/wallpapers/personajes-de-valorant-5692.jpg" },

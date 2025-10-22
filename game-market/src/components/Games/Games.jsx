@@ -78,7 +78,7 @@ const games = [
     nombre: "Grand Theft Auto V",
     categoria: "Acción / Mundo abierto",
     precio: 3500,
-    img: "",
+    img: "./gtav.jpg",
   },
   {
     id: 14,

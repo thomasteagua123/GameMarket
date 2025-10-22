@@ -10,16 +10,9 @@ export function HomeClientes() {
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // 👈 Nuevo estado
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const games = useGames();
-
-  // Animación de carga
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 3500); // 3.5s de animación
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     setFilteredGames(games);
@@ -76,25 +69,6 @@ export function HomeClientes() {
   const irAlCarrito = () => {
     navigate("/carrito");
   };
-
-  // 👇 Si está cargando, muestra la animación
-  if (loading) {
-    return (
-      <div className="loading-screen">
-        <video
-          src="/animaciondeinicio.mp4"
-          autoPlay
-          muted
-          playsInline
-          style={{
-            width: "500px",
-            height: "500px",
-            objectFit: " center",
-          }}
-        />
-      </div>
-    );
-  }
 
   return (
     <div>

@@ -21,6 +21,8 @@
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  /* Altura mínima para asegurar que todas las tarjetas se vean uniformes */
+  min-height: 400px; 
 }
 
 .games-grid li:hover {
@@ -28,11 +30,13 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* Imagen del juego (más chica y centrada) */
+/* Imagen del juego */
 .games-grid img {
-  width: 100%;
-  height: 110px; /* 🔽 reducido desde 140px */
-  object-fit: contain; /* 🔄 para mostrar toda la imagen sin recortes */
+
+  object-fit: contain; 
+  /* Asegura que la imagen esté centrada en su espacio */
+  object-position: center; 
+  
   background-color: #f9f9f9;
   border-radius: 12px 12px 0 0;
   margin-bottom: 0.5rem;
@@ -42,13 +46,25 @@
 .games-grid div {
   padding: 0 0.5rem 0.5rem 0.5rem;
   flex-grow: 1;
-  text-align: center; /* 🔄 centrado */
+  text-align: center;
+  /* ⭐️ CLAVE para la animación: Oculta el texto cuando sale de la caja */
+  overflow: hidden; 
 }
 
 /* Título */
 .games-grid h3 {
+  /* ⭐️ CLAVE para la animación: Desactiva el truncamiento '...' */
+  text-overflow: clip; 
+  /* Asegura que el título quede en una sola línea */
+  white-space: nowrap;
+  
+  /* ⭐️ CLAVE para la animación: Aplica el movimiento */
+  animation: scroll-text 15s linear infinite; 
+  
+  /* Estilos de fuente ajustados */
+  font-size: 1rem; 
+  text-align: left; /* Para que la animación comience de izquierda a derecha */
   margin: 0 0 0.3rem 0;
-  font-size: 1.1rem;
   color: #222;
 }
 
@@ -75,4 +91,19 @@
 .agregar-btn:hover {
   background: #1e81ce;
   transform: scale(1.05);
+}
+
+/* ------------------------------------------------ */
+/* DEFINICIÓN DE LA ANIMACIÓN DE CINTA */
+/* ------------------------------------------------ */
+
+@keyframes scroll-text {
+  /* Mueve el texto desde fuera del borde derecho */
+  0% {
+    transform: translateX(100%);
+  }
+  /* Mueve el texto hasta fuera del borde izquierdo */
+  100% {
+    transform: translateX(-100%);
+  }
 }

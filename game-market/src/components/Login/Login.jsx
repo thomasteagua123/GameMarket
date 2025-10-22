@@ -7,7 +7,6 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // 👈 nuevo estado para animación
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -27,15 +26,14 @@ function Login() {
 
       if (success) {
         setMessage("¡Login exitoso!");
-        setLoading(true); // 👈 mostrar animación
-        // después de 3.5 segundos redirige al home correspondiente
-        setTimeout(() => {
-          if (username === adminUser && password === adminPass) {
-            navigate("/");
-          } else {
-            navigate("/homeClientes");
-          }
-        }, 3500);
+      
+        // **Código modificado: Se elimina el setTimeout**
+        if (username === adminUser && password === adminPass) {
+          navigate("/"); // Navegación inmediata para el administrador
+        } else {
+          navigate("/homeClientes"); // Navegación inmediata para el cliente
+        }
+        
       } else {
         setMessage("Usuario o contraseña incorrectos");
       }
@@ -44,25 +42,6 @@ function Login() {
       setMessage("Error de conexión con el servidor");
     }
   };
-
-  // 👇 si está cargando, muestra la animación
-  if (loading) {
-   return (
-      <div className="loading-screen">
-        <video
-          src="/animaciondeinicio.mp4"
-          autoPlay
-          muted
-          playsInline
-          style={{
-            width: "500px",
-            height: "500px",
-            objectFit: " center",
-          }}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="login-container">
