@@ -303,6 +303,7 @@ export function Games({ filteredGames = [], handleAddToCart }) {
       <ul className="games-grid">
         {currentGames.map((game) => (
           <li key={game.id} className="game-item">
+            {/* Imagen del juego */}
             <img
               src={
                 game.img ||
@@ -310,6 +311,8 @@ export function Games({ filteredGames = [], handleAddToCart }) {
               }
               alt={game.nombre}
             />
+
+            {/* Contenedor de información */}
             <div className="game-info">
               <h3 className="game-title">{game.nombre}</h3>
               <p className="game-details">
@@ -322,6 +325,7 @@ export function Games({ filteredGames = [], handleAddToCart }) {
                 Agregar al carrito
               </button>
             </div>
+            <div className="popover">Información del juego</div>
           </li>
         ))}
       </ul>

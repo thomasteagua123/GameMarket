@@ -11,6 +11,7 @@
 
 /* Cada tarjeta */
 .games-grid li {
+  position: relative;
   background: #fff;
   border-radius: 12px;
   padding: 0.5rem;
@@ -23,10 +24,29 @@
   align-items: center;
   overflow: hidden;
 }
+/* Popover que aparece al lado derecho de la tarjeta */
+.popover {
+  position: absolute;
+  top: 50%; /* Centrado verticalmente */
+  right: -110%; /* Justo a la derecha de la tarjeta, ajustando el desplazamiento */
+  transform: translateY(-50%); /* Asegura que quede centrado verticalmente */
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 1000;
+}
 
-.games-grid li:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+/* Se muestra cuando el mouse pasa sobre la tarjeta */
+.games-grid li:hover .popover {
+  opacity: 1;
+  background-color: #1e81ce;
+  right: 0; /* El popover se moverá a la posición correcta al hacer hover */
 }
 
 /* Imagen del juego */

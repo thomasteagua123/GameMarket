@@ -8,19 +8,19 @@ export function Carrito() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedCart = JSON.parse(sessionStorage.getItem("carrito")) || [];
+    const storedCart = JSON.parse(localStorage.getItem("carrito")) || [];
     setCartItems(storedCart);
   }, []);
 
   const handleRemove = (game_id) => {
     const updatedCart = cartItems.filter((item) => item.game_id !== game_id);
     setCartItems(updatedCart);
-    sessionStorage.setItem("carrito", JSON.stringify(updatedCart));
+    localStorage.setItem("carrito", JSON.stringify(updatedCart));
   };
 
   const handleClearCart = () => {
     setCartItems([]);
-    sessionStorage.removeItem("carrito");
+    localStorage.removeItem("carrito");
   };
 
   const handleQuantityChange = (game_id, delta) => {
@@ -30,12 +30,12 @@ export function Carrito() {
         : item
     );
     setCartItems(updatedCart);
-    sessionStorage.setItem("carrito", JSON.stringify(updatedCart));
+    localStorage.setItem("carrito", JSON.stringify(updatedCart));
   };
 
   const payment = () => {
     if (cartItems.length === 0) return;
-    sessionStorage.setItem("carrito", JSON.stringify(cartItems));
+    localStorage.setItem("carrito", JSON.stringify(cartItems));
     navigate("/simular-compra");
   };
 
@@ -68,7 +68,7 @@ export function Carrito() {
                 />
                 <div className="carrito-info">
                   <h3>{item.nombre}</h3>
-                  <p>${item.precio.toLocaleString()}</p>
+                  <p>${item.precio}</p>
                 </div>
                 <div className="carrito-controles">
                   <button
@@ -97,7 +97,7 @@ export function Carrito() {
           </div>
 
           <div className="carrito-footer">
-            <h3 className="carrito-total">Total: ${total.toLocaleString()}</h3>
+            <h3 className="carrito-total">Total: ${total}</h3>
             <div className="carrito-acciones">
               <button className="carrito-acciones" onClick={handleClearCart}>
                 Vaciar Carrito
