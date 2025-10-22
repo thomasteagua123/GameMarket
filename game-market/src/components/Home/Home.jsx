@@ -22,6 +22,10 @@ export function Home() {
     navigate("/login");
   };
 
+  if (user) {
+    navigate("/homeClientes"); // Redirige a homeClientes si el usuario ya está autenticado,
+    // cuando estoy logeado y entro a localhost:5173/, me manda directamente a homeClientes
+  }
   return (
     <div>
       <header className="header">
@@ -133,7 +137,7 @@ export function Home() {
           </div>
         )}
 
-        <Games/>
+        <Games />
       </main>
     </div>
   );

@@ -15,16 +15,33 @@ export const AuthProvider = ({ children }) => {
 
   // Verificar sesión activa
   useEffect(() => {
+    // Primero intenta restaurar desde localStorage (fallback rápido)
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch (e) {
+        localStorage.removeItem("user");
+      }
+    }
+
+    // Luego verifica en el backend (cookie de sesión)
     axios
       .get(`${API_URL}/perfil`, { withCredentials: true })
       .then((res) => {
-        if (res.data.username) {
-          setUser({ username: res.data.username, rol: res.data.rol });
+        // El backend devuelve { email, rol } si hay sesión
+        if (res.data.email) {
+          const u = { email: res.data.email, rol: res.data.rol };
+          setUser(u);
+          localStorage.setItem("user", JSON.stringify(u));
         } else {
           setUser(null);
+          localStorage.removeItem("user");
         }
       })
-      .catch(() => setUser(null));
+      .catch(() => {
+        // Si falla, no sobreescribimos la info local almacenada
+      });
   }, []);
 
   // LOGIN usando username
@@ -36,7 +53,9 @@ export const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
       if (res.data.success) {
-        setUser({ username, rol: res.data.rol });
+        const u = { email: username, rol: res.data.rol };
+        setUser(u);
+        localStorage.setItem("user", JSON.stringify(u));
         return true;
       }
     } catch (err) {
@@ -48,6 +67,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
     setUser(null);
+    localStorage.removeItem("user");
   };
 
   // REGISTER (si querés agregar email, se puede ajustar después)

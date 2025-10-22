@@ -2,31 +2,44 @@ from flask import Flask, jsonify, request, session
 from flask_cors import CORS
 import pymysql.cursors
 import bcrypt  # instalar con: pip install bcrypt
+import os
+from dotenv import load_dotenv
 
+# Cargar .env desde el proyecto raíz
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 app = Flask(__name__)
-# Clave secreta para sesiones
-app.config['SECRET_KEY'] = 'mimamamemima123'
+# Clave secreta para sesiones (desde .env)
+app.config['SECRET_KEY'] = os.getenv('SUPER_KEY', 'change-me')
+# Configuración de cookie de sesión para desarrollo local
+# Permitir envío de cookies entre frontend (localhost:5173) y backend (localhost:5000)
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_DOMAIN'] = 'localhost'
 
 
 
 
 # 🔧 Habilitar CORS para React
+frontend = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+origins = [frontend, 'http://127.0.0.1:5173']
+
 CORS(
-   app,
-   resources={r"/*": {"origins": ["http://localhost:5173"]}},
-   supports_credentials=True
+    app,
+    resources={r"/*": {"origins": origins}},
+    supports_credentials=True
 )
 
 
 # 🔗 Conexión a la DB con pymysql
 def get_db_connection():
    conn = pymysql.connect(
-       host="10.9.120.5",
-       port=3306,
-       user="gameMarket",
-       password="game1234",
-       database="gameMarket",
+       host=os.getenv('DB_HOST', '127.0.0.1'),
+       port=int(os.getenv('DB_PORT', 3306)),
+       user=os.getenv('DB_USER', 'root'),
+       password=os.getenv('DB_PASSWORD', ''),
+       database=os.getenv('DB_NAME', ''),
        cursorclass=pymysql.cursors.DictCursor  # 👈 ya devuelve diccionarios
    )
    return conn
