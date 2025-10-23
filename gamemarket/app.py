@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
 import pymysql.cursors
-import bcrypt  # instalar con: pip install bcrypt
+import bcrypt
 import os
 from dotenv import load_dotenv
 
@@ -9,26 +9,32 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 app = Flask(__name__)
-# Clave secreta para sesiones (desde .env)
+
+# Clave secreta para sesiones
 app.config['SECRET_KEY'] = os.getenv('SUPER_KEY', 'change-me')
-# Configuración de cookie de sesión para desarrollo local
-# Permitir envío de cookies entre frontend (localhost:5173) y backend (localhost:5000)
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+
+# 💡 AJUSTES CRÍTICOS PARA COOKIES EN DESARROLLO CORS
+# 1. Necesario para que el navegador envíe cookies entre diferentes puertos de localhost.
+app.config['SESSION_COOKIE_SAMESITE'] = 'None' 
+# 2. Debe ser False en HTTP (localhost)
 app.config['SESSION_COOKIE_SECURE'] = False
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_DOMAIN'] = 'localhost'
-
-
+app.config['SESSION_COOKIE_HTTPONLY'] = True 
+# No es necesario especificar DOMAIN en localhost:
+# app.config['SESSION_COOKIE_DOMAIN'] = 'localhost' 
 
 
 # 🔧 Habilitar CORS para React
-frontend = os.getenv('FRONTEND_URL', 'http://localhost:5173')
-origins = [frontend, 'http://127.0.0.1:5173']
+frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:5174') # 💡 Usando 5174 como se ve en tu error
+origins = [frontend_url, 'http://127.0.0.1:5174']
 
+# 💡 CAMBIO CLAVE: Cuando supports_credentials=True, CORS(app, ...) DEBE USAR UNA LISTA 
+# DE ORÍGENES ESPECÍFICOS Y NO PUEDE USAR EL COMODÍN "*" EN EL ENCABEZADO.
+# Tu configuración actual es correcta, pero la simplificamos para asegurar que no haya conflictos.
 CORS(
     app,
-    resources={r"/*": {"origins": origins}},
-    supports_credentials=True
+    resources={r"/*": {"origins": origins}}, # Permite solicitudes a todas las rutas desde tus orígenes
+    supports_credentials=True,              # Permite cookies y encabezados de autorización
+    allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"] # Headers explícitos
 )
 
 
@@ -40,11 +46,9 @@ def get_db_connection():
        user=os.getenv('DB_USER', 'root'),
        password=os.getenv('DB_PASSWORD', ''),
        database=os.getenv('DB_NAME', ''),
-       cursorclass=pymysql.cursors.DictCursor  # 👈 ya devuelve diccionarios
+       cursorclass=pymysql.cursors.DictCursor
    )
    return conn
-
-
 
 
 @app.route("/")
@@ -52,12 +56,11 @@ def home():
    return "Bienvenido a GameMarket"
 
 
-
-
 # ---------------- PERFIL (verificación de sesión) ---------------- #
 @app.route("/perfil", methods=["GET"])
 def perfil_usuario():
-   email = session.get("user")
+   # Aquí se comprueba si la cookie de sesión fue enviada por el navegador
+   email = session.get("user") 
    if email:
        # Obtener rol de BD
        conn = get_db_connection()
@@ -67,15 +70,13 @@ def perfil_usuario():
        cursor.close()
        conn.close()
 
-
        if user:
            return jsonify({"email": email, "rol": user["rol"]})
        else:
            return jsonify({"error": "Usuario no encontrado"}), 404
    else:
+       # Si session.get("user") es None, la cookie no llegó o no es válida.
        return jsonify({"error": "No estás logueado"}), 401
-
-
 
 
 # ---------------- GAMES ---------------- #
@@ -88,8 +89,6 @@ def get_games():
    cursor.close()
    conn.close()
    return jsonify(games)
-
-
 
 
 @app.route("/api/clients", methods=["GET"])
@@ -115,7 +114,7 @@ def add_client():
     first_name = data.get("first_name")
     last_name = data.get("last_name")
     game_id = data.get("game_id")
-    payment_method = data.get("payment_method")  # ✅ llega desde el frontend
+    payment_method = data.get("payment_method")
 
     if not first_name or not last_name or not game_id or not payment_method:
         print("⚠️ Faltan datos:", first_name, last_name, game_id, payment_method)
@@ -125,14 +124,14 @@ def add_client():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # ✅ Insertar cliente
+        # Insertar cliente
         cursor.execute(
             "INSERT INTO client (first_name, last_name, game_id) VALUES (%s, %s, %s)",
             (first_name, last_name, game_id)
         )
         client_id = cursor.lastrowid
 
-        # ✅ Insertar compra con método de pago
+        # Insertar compra con método de pago
         cursor.execute(
             "INSERT INTO buys (client_id, game_id, payment_method) VALUES (%s, %s, %s)",
             (client_id, game_id, payment_method)
@@ -150,10 +149,6 @@ def add_client():
     finally:
         cursor.close()
         conn.close()
-
-
-
-
 
 
 # ---------------- REGISTRO ---------------- #
@@ -188,10 +183,6 @@ def register_user():
        conn.close()
 
 
-
-
-
-
 # ---------------- LOGIN ---------------- #
 @app.route("/login", methods=["POST"])
 def login_user():
@@ -217,20 +208,17 @@ def login_user():
 
 
    if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-       session['user'] = username
+       # Si el login es exitoso, Flask establece la cookie de sesión
+       session['user'] = username 
        return jsonify({"success": True, "message": "Login exitoso", "rol": user['rol']})
    else:
        return jsonify({"success": False, "message": "Usuario o contraseña incorrectos"}), 401
-
-
 
 
 @app.route("/logout", methods=["POST"])
 def logout_user():
    session.pop('user', None)
    return jsonify({"success": True, "message": "Logout exitoso"})
-
-
 
 
 # ---------------- ADMIN ENDPOINT ---------------- #
@@ -260,7 +248,6 @@ def admin_only():
    return jsonify({"message": f"Bienvenido admin {email}"}), 200
 
 
-
-
 if __name__ == "__main__":
+   # 💡 Usar 0.0.0.0 asegura que la aplicación sea accesible en la red local si es necesario
    app.run(host="0.0.0.0", port=5000, debug=True)

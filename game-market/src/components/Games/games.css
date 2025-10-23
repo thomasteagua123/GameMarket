@@ -2,9 +2,10 @@
 .games-grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* 💡 Ajuste para asegurar que caben más elementos y se adaptan */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
   grid-template-rows: auto;
-  gap: 1rem;
+  gap: 1.5rem; /* Aumentamos ligeramente el espacio */
   padding: 0;
   margin: 0;
 }
@@ -24,37 +25,47 @@
   align-items: center;
   overflow: hidden;
 }
-/* Popover que aparece al lado derecho de la tarjeta */
+
+/* ------------------------------------------------ */
+/* ESTILO ORIGINAL DEL POPOVER (GLOBO INFORMATIVO) */
+/* ------------------------------------------------ */
 .popover {
   position: absolute;
   top: 50%; /* Centrado verticalmente */
-  right: -110%; /* Justo a la derecha de la tarjeta, ajustando el desplazamiento */
-  transform: translateY(-50%); /* Asegura que quede centrado verticalmente */
+  /* Lo coloca fuera del borde derecho de la tarjeta */
+  right: -10px; 
+  transform: translateY(-50%) translateX(100%); /* Desplazado completamente fuera del borde derecho */
+  
   background: rgba(0, 0, 0, 0.85);
   color: white;
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   font-size: 0.85rem;
   white-space: nowrap;
+  
+  /* Se mantiene oculto hasta el hover */
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
   z-index: 1000;
+  
+  /* Asegura que el contenido del popover no se corte */
+  width: 250px;
+  height: auto;
 }
 
 /* Se muestra cuando el mouse pasa sobre la tarjeta */
 .games-grid li:hover .popover {
   opacity: 1;
   background-color: #1e81ce;
-  right: 0; /* El popover se moverá a la posición correcta al hacer hover */
+  /* Vuelve el popover a su posición visible al hacer hover */
+  transform: translateY(-50%) translateX(0); 
 }
 
 /* Imagen del juego */
 .games-grid img {
   aspect-ratio: 3 / 4; /* Mantiene una proporción consistente */
-
   object-fit: cover;
-  /* Asegura que la imagen esté centrada en su espacio */
   object-position: center;
   width: 100%;
   background-color: #f9f9f9;
@@ -67,23 +78,16 @@
   padding: 0 0.5rem 0.5rem 0.5rem;
   flex-grow: 1;
   text-align: center;
-  /* ⭐️ CLAVE para la animación: Oculta el texto cuando sale de la caja */
   overflow: hidden;
 }
 
 /* Título */
 .games-grid h3 {
-  /* ⭐️ CLAVE para la animación: Desactiva el truncamiento '...' */
   text-overflow: clip;
-  /* Asegura que el título quede en una sola línea */
   white-space: nowrap;
-
-  /* ⭐️ CLAVE para la animación: Aplica el movimiento */
   animation: scroll-text 15s linear infinite;
-
-  /* Estilos de fuente ajustados */
   font-size: 1rem;
-  text-align: left; /* Para que la animación comience de izquierda a derecha */
+  text-align: left;
   margin: 0 0 0.3rem 0;
   color: #222;
 }
