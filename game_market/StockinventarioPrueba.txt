@@ -1,0 +1,9 @@
+
+---Quitar juegos del inventario---
+
+UPDATE inventory 
+SET stock_quantity = stock_quantity - 1 
+WHERE game_id = 1 AND platform_name = 'PlayStation 4';
+
+
+---

@@ -30,3 +30,5 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom
 npm install --save-dev ts-jest @types/jest
 
 npm install --save-dev identity-obj-proxy
+
+pip install CORS
