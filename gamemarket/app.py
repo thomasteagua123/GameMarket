@@ -177,20 +177,23 @@ def register_user():
    username = data.get("username")
    password = data.get("password")
 
-
    if not email or not username or not password:
        return jsonify({"error": "Faltan email, username o password"}), 400
-
-
-   hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
 
    try:
        conn = get_db_connection()
        cursor = conn.cursor()
+
+       # Verificar si ya existe el username
+       cursor.execute("SELECT * FROM usuarios WHERE username=%s", (username,))
+       existing_user = cursor.fetchone()
+       if existing_user:
+           return jsonify({"error": "Ya existe un usuario con ese nombre"}), 409
+
+       hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
        cursor.execute(
            "INSERT INTO usuarios (email, username, password, rol) VALUES (%s, %s, %s, %s)",
-           (email, username, hashed_password, 'usuario')  # rol por defecto usuario
+           (email, username, hashed_password, 'usuario')
        )
        conn.commit()
        return jsonify({"message": f"Usuario {username} agregado correctamente"}), 201

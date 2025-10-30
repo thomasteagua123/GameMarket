@@ -18,9 +18,10 @@ function Register() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/usuarios", {
+      const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // Importante para enviar cookies de sesión
         body: JSON.stringify({ email, username, password }),
       });
 
