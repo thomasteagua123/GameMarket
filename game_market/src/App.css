@@ -1,74 +1,89 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 2rem 1rem;
-  background: mintcream;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(255, 60, 120, 0.3);
-  color: black;
-  font-family: "Orbitron", "Press Start 2P", sans-serif;
+ text-align: center;
+ background: linear-gradient(135deg, white, #2a9df4);
+ border-radius: 10px;
+ color: black;
+ font-family: "Orbitron", "Press Start 2P", sans-serif;
 }
 
-/* Logo con tamaño grande y espacio */
+
+/* Logo */
 .logo {
-  height: 7em;
-  padding: 1.5em;
-  will-change: filter, transform;
-  transition: filter 300ms, transform 300ms ease;
-  cursor: pointer;
+ height: 7em;
+ padding: 1.5em;
+ will-change: filter, transform;
+ transition: filter 300ms, transform 300ms ease;
+ cursor: pointer;
 }
 
-/* Efecto neón al pasar el mouse por el logo */
+
+/* Efecto neón al pasar el mouse */
 .logo:hover {
-  filter: drop-shadow(0 0 2.5em #ff3c78cc);
-  transform: scale(1.1);
+ filter: drop-shadow(0 0 2.5em #a855f7cc);
+ transform: scale(1.1);
 }
 
-/* Logo específico con un color cyan neón y animación */
+
+/* Logo react con azul eléctrico */
 .logo.react:hover {
-  filter: drop-shadow(0 0 3em #22c1c3cc);
-  transform: scale(1.1);
+ filter: drop-shadow(0 0 3em #38bdf8cc);
+ transform: scale(1.1);
 }
 
-/* Animación de giro continuo para un logo llamativo */
+
+/* Animación de giro */
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+ from {
+   transform: rotate(0deg);
+ }
+ to {
+   transform: rotate(360deg);
+ }
 }
 
-/* Aplicar spin solo si el usuario prefiere animaciones */
+
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+ a:nth-of-type(2) .logo {
+   animation: logo-spin infinite 20s linear;
+ }
 }
 
-/* Tarjetas destacadas con relleno y sombra neón */
+
+/* Tarjetas */
 .card {
-  padding: 2.5em;
-  background: white;
-  border-radius: 18px;
-  box-shadow: 0 8px 20px rgba(255, 60, 120, 0.4);
-  transition: box-shadow 0.3s ease;
-  margin: 1.5rem 0;
-  color: #e0e0e0;
-  font-weight: 600;
-  font-size: 1.1rem;
-  font-family: "Orbitron", sans-serif;
+ padding: 2.5em;
+ background: rgba(40, 35, 55, 0.9);
+ border-radius: 18px;
+ box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+ transition: box-shadow 0.3s ease;
+ margin: 1.5rem 0;
+ color: #f3e8ff;
+ font-weight: 600;
+ font-size: 1.1rem;
+ font-family: "Orbitron", sans-serif;
 }
+
 
 .card:hover {
-  box-shadow: 0 12px 30px rgba(255, 60, 120, 0.7);
+ box-shadow: 0 12px 30px rgba(168, 85, 247, 0.7);
 }
 
-/* Texto más tenue para secciones menos importantes */
+
+/* Texto secundario */
 .read-the-docs {
-  color: #777;
+ color: #b8a6ff;
+ font-style: italic;
+ font-size: 0.9rem;
+ letter-spacing: 1px;
+ margin-top: 1rem;
+}
+
+
+
+
+
+
+
   font-style: italic;
   font-size: 0.9rem;
   letter-spacing: 1px;
