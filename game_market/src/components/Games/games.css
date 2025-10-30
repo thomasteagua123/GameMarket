@@ -40,6 +40,7 @@
   pointer-events: none;
   transition: opacity 0.25s ease;
   z-index: 1000;
+  white-space: normal;
 }
 
 /* Se muestra cuando el mouse pasa sobre la tarjeta */
