@@ -15,7 +15,7 @@ export function HomeClientes() {
   const { user, logout } = useAuth();
   const games = useGames();
 
-  console.log(games)
+  // console.log(games)
 
 /*  useEffect(() => {
     setFilteredGames(games);
@@ -34,8 +34,8 @@ export function HomeClientes() {
         game.nombre.toLowerCase().includes(term) ||
         game.categoria.toLowerCase().includes(term)
     );
-    console.log(games)
-    console.log('filtered', filtered)
+    // console.log(games)
+    // console.log('filtered', filtered)
     setFilteredGames(filtered);
   };
 

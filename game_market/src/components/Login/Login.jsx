@@ -10,12 +10,20 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const adminUser = "admin";
-  const adminPass = "1234";
+  const adminUser = 'admin'
+  const adminPass = '1234'
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // Importante para enviar cookies de sesión
+        body: JSON.stringify({ username, password }),
+      });
 
+    console.log(response);
+      
     if (!username || !password) {
       setMessage("Debes ingresar usuario y contraseña");
       return;
@@ -23,6 +31,7 @@ function Login() {
 
     try {
       const success = await login(username, password);
+
 
       if (success) {
         setMessage("¡Login exitoso!");
@@ -32,6 +41,7 @@ function Login() {
           navigate("/"); // Navegación inmediata para el administrador
         } else {
           navigate("/homeClientes"); // Navegación inmediata para el cliente
+          
         }
         
       } else {

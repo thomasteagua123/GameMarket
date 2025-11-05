@@ -4,13 +4,13 @@ import "./games.css";
 
 
 export function Games({ filteredGames, handleAddToCart , games}) {
-  const lista = filteredGames.length > 0 ? filteredGames : games;
-  //console.log(lista)
+  const lista = filteredGames?.length > 0 ? filteredGames : games;
+  console.log(games)
 
   // 🔹 PAGINACIÓN
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // juegos por página
-  const totalPages = Math.ceil(lista.length / itemsPerPage);
+  const totalPages = Math.ceil(lista?.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;

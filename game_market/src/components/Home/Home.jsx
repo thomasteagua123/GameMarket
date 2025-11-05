@@ -1,40 +1,84 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Games } from "../Games/Games";
-import { FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { useGames } from "../../hooks/useGames";
 import "./home.css";
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 
 export function Home() {
-  const [games, setGames] = useState([]);
+  const [filteredGames, setFilteredGames] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+  const {  isAdmin } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, isAdmin, logout } = useAuth();
+  const { user, logout } = useAuth();
+  const games = useGames();
 
+
+/*  useEffect(() => {
+    setFilteredGames(games);
+  }, [games]);
+*/
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/games")
-      .then((res) => res.json())
-      .then((data) => setGames(data))
-      .catch((err) => console.error(err));
+    const storedCart = JSON.parse(localStorage.getItem("carrito")) || [];
+    setCartItems(storedCart);
+    setCartCount(storedCart.reduce((sum, item) => sum + item.cantidad, 0));
   }, []);
+
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    const filtered = games.filter(
+      (game) =>
+        game.nombre.toLowerCase().includes(term) ||
+        game.categoria.toLowerCase().includes(term)
+    );
+    // console.log(games)
+    // console.log('filtered', filtered)
+    setFilteredGames(filtered);
+  };
+
+  const handleAddToCart = (game) => {
+    let updatedCart;
+    const existing = cartItems.find((item) => item.game_id === game.id);
+
+    if (existing) {
+      updatedCart = cartItems.map((item) =>
+        item.game_id === game.id
+          ? { ...item, cantidad: item.cantidad + 1 }
+          : item
+      );
+    } else {
+      updatedCart = [
+        ...cartItems,
+        {
+          game_id: game.id,
+          nombre: game.nombre,
+          precio: game.precio,
+          cantidad: 1,
+        },
+      ];
+    }
+
+    localStorage.setItem("carrito", JSON.stringify(updatedCart));
+    setCartItems(updatedCart);
+    setCartCount(updatedCart.reduce((sum, item) => sum + item.cantidad, 0));
+  };
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  if (user) {
-    navigate("/homeClientes"); 
-  }
+  const irAlCarrito = () => {
+    navigate("/carrito");
+  };
 
   return (
     <div>
       <header className="header">
-        <button
-          className="menu-toggle"
-          aria-label="Toggle menu"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
           &#9776;
         </button>
 
@@ -109,16 +153,28 @@ export function Home() {
 
         {!menuOpen && (
           <>
-            {user ? (
-              <button className="register-btn" onClick={handleLogout}>
-                Cerrar Sesión
-              </button>
-            ) : (
-              <button
-                className="register-btn"
-                onClick={() => navigate("/login")}
-              >
-                inicio sesión
+            <input
+              type="text"
+              placeholder="Buscar juegos..."
+              onChange={handleSearch}
+              className="buscar-input"
+            />
+            <p className="p">Carrito: {cartCount}</p>
+            {user && (
+              <button className="carrito-btn" onClick={irAlCarrito}>
+                <video
+                  src="/carro.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "2px",
+                    cursor: "pointer",
+                  }}
+                />
               </button>
             )}
           </>
@@ -135,11 +191,12 @@ export function Home() {
             </Link>
           </div>
         )}
-
-        <Games />
+        <Games
+          filteredGames={filteredGames}
+          handleAddToCart={handleAddToCart}
+          games={games}
+        />
       </main>
-
-      {/* 🔻 FOOTER agregado aquí */}
       <footer className="footer">
         <div className="footer-item">
           <FaWhatsapp className="icon" />
