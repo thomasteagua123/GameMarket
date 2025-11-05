@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Games } from "../Games/Games";
 import { useGames } from "../../hooks/useGames";
 import "./home.css";
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 
 export function HomeClientes() {
   const [filteredGames, setFilteredGames] = useState([]);
@@ -14,10 +15,12 @@ export function HomeClientes() {
   const { user, logout } = useAuth();
   const games = useGames();
 
-  useEffect(() => {
+  console.log(games)
+
+/*  useEffect(() => {
     setFilteredGames(games);
   }, [games]);
-
+*/
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("carrito")) || [];
     setCartItems(storedCart);
@@ -31,6 +34,8 @@ export function HomeClientes() {
         game.nombre.toLowerCase().includes(term) ||
         game.categoria.toLowerCase().includes(term)
     );
+    console.log(games)
+    console.log('filtered', filtered)
     setFilteredGames(filtered);
   };
 
@@ -181,8 +186,19 @@ export function HomeClientes() {
         <Games
           filteredGames={filteredGames}
           handleAddToCart={handleAddToCart}
+          games={games}
         />
       </main>
+      <footer className="footer">
+        <div className="footer-item">
+          <FaWhatsapp className="icon" />
+          <span className="text">+54 9 11 5229 7349</span>
+        </div>
+        <div className="footer-item">
+          <FaInstagram className="icon" />
+          <span className="text">@gameMarket_ok</span>
+        </div>
+      </footer>
     </div>
   );
 }

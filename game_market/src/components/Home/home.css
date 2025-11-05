@@ -45,6 +45,52 @@ body {
  background: #1661a9;
 }
 
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 20px;
+  background-color: #111;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  border-top: 2px solid #222;
+  margin-top: 40px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s ease;
+}
+
+.footer-item:hover {
+  transform: scale(1.05);
+}
+
+.icon {
+  font-size: 24px;
+  color: #25d366; /* WhatsApp */
+}
+
+.footer-item:nth-child(2) .icon {
+  color: #e1306c; /* Instagram */
+}
+
+.text {
+  font-size: 16px;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .footer {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
 
 /* Layout */
 .catalogo {

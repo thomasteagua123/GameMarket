@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Games } from "../Games/Games";
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import "./home.css";
 
 export function Home() {
@@ -23,9 +24,9 @@ export function Home() {
   };
 
   if (user) {
-    navigate("/homeClientes"); // Redirige a homeClientes si el usuario ya está autenticado,
-    // cuando estoy logeado y entro a localhost:5173/, me manda directamente a homeClientes
+    navigate("/homeClientes"); 
   }
+
   return (
     <div>
       <header className="header">
@@ -109,17 +110,15 @@ export function Home() {
         {!menuOpen && (
           <>
             {user ? (
-              <>
-                <button className="register-btn" onClick={handleLogout}>
-                  Cerrar Sesión
-                </button>
-              </>
+              <button className="register-btn" onClick={handleLogout}>
+                Cerrar Sesión
+              </button>
             ) : (
               <button
                 className="register-btn"
                 onClick={() => navigate("/login")}
               >
-                inicio sesiòn
+                inicio sesión
               </button>
             )}
           </>
@@ -139,6 +138,18 @@ export function Home() {
 
         <Games />
       </main>
+
+      {/* 🔻 FOOTER agregado aquí */}
+      <footer className="footer">
+        <div className="footer-item">
+          <FaWhatsapp className="icon" />
+          <span className="text">+54 9 11 5229 7349</span>
+        </div>
+        <div className="footer-item">
+          <FaInstagram className="icon" />
+          <span className="text">@gameMarket_ok</span>
+        </div>
+      </footer>
     </div>
   );
 }
