@@ -94,7 +94,7 @@ def perfil_usuario():
            return jsonify({"error": "Usuario no encontrado"}), 404
    else:
        # Si session.get("user") es None, la cookie no llegó o no es válida.
-       return jsonify({"error": "No estás logueado"}), 401
+       return jsonify({"error": "No estas logueado"}), 401
 
 
 # ---------------- GAMES ---------------- #

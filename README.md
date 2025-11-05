@@ -7,3 +7,10 @@ pip install flask
 icono
 
 npm install react-fontawesome
+    
+
+
+    PRINT TEST:
+
+pytest -rP 
+
