@@ -159,7 +159,6 @@ export function Home() {
               onChange={handleSearch}
               className="buscar-input"
             />
-            <p className="p">Carrito: {cartCount}</p>
             {user && (
               <button className="carrito-btn" onClick={irAlCarrito}>
                 <video

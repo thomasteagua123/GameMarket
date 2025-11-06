@@ -7,3 +7,11 @@ WHERE game_id = 1 AND platform_name = 'PlayStation 4';
 
 
 ---
+
+
+
+
+UPDATE inventory 
+SET stock_quantity = stock_quantity - [cantidad_comprada]
+WHERE game_id = [id_del_juego] 
+AND platform_name = '[nombre_de_la_plataforma]';

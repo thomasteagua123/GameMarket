@@ -31,4 +31,8 @@ npm install --save-dev ts-jest @types/jest
 
 npm install --save-dev identity-obj-proxy
 
+pip install flask-cors
+
+pip install bcrypt
+
 pip install CORS

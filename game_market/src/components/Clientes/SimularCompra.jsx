@@ -28,7 +28,8 @@ export default function SimularCompra() {
     if (!expiryValidation.isValid) return alert("Fecha inválida");
     if (!cvcValidation.isValid) return alert("CVC inválido");
 
-    const items = JSON.parse(sessionStorage.getItem("carrito")) || [];
+    // ✅ AHORA LEE EL CARRITO REAL
+    const items = JSON.parse(localStorage.getItem("carrito")) || [];
 
     if (items.length === 0) {
       alert("El carrito está vacío.");
@@ -53,7 +54,7 @@ export default function SimularCompra() {
           first_name: cardData.name.split(" ")[0],
           last_name: cardData.name.split(" ").slice(1).join(" "),
           game_id: juegoId,
-          payment_method: paymentMethod, // ✅ agregado
+          payment_method: paymentMethod,
         });
 
         await fetch("http://localhost:5000/api/clients", {
@@ -63,7 +64,7 @@ export default function SimularCompra() {
             first_name: cardData.name.split(" ")[0],
             last_name: cardData.name.split(" ").slice(1).join(" "),
             game_id: juegoId,
-            payment_method: paymentMethod, // ✅ ahora se envía al backend
+            payment_method: paymentMethod,
           }),
           credentials: "include",
         });
@@ -75,7 +76,8 @@ export default function SimularCompra() {
       return;
     }
 
-    sessionStorage.removeItem("carrito");
+    // ✅ AHORA BORRA EL CARRITO REAL
+    localStorage.removeItem("carrito");
 
     navigate("/comprobante", {
       state: {
@@ -92,7 +94,7 @@ export default function SimularCompra() {
         total,
         cardLast4: cardData.number.slice(-4),
         cardName: cardData.name,
-        paymentMethod, // ✅ para mostrarlo en el comprobante
+        paymentMethod,
       },
     });
   };

@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.config.from_mapping(
     SECRET_KEY=os.getenv('SUPER_KEY', 'change-me-default'),
     SESSION_COOKIE_SAMESITE='None',   # Necesario para CORS + cookies
-    SESSION_COOKIE_SECURE=False,       # True si usás HTTPS
+    SESSION_COOKIE_SECURE=False,      
     SESSION_COOKIE_HTTPONLY=True,
 )
 
@@ -42,14 +42,13 @@ CORS(
     expose_headers=["Content-Type"]
 )
 
-# 🩹 Parche adicional (asegura CORS en todas las respuestas)
 @app.after_request
 def add_cors_headers(response):
     origin = request.headers.get("Origin")
     if origin in frontend_urls:
         response.headers["Access-Control-Allow-Origin"] = origin
     else:
-        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Origin"] = "*" 
     response.headers["Access-Control-Allow-Credentials"] = "true"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
@@ -61,7 +60,7 @@ def add_cors_headers(response):
 def get_db_connection():
     conn = pymysql.connect(
         host=os.getenv('DB_HOST'),
-        port=int(os.getenv('DB_PORT')),
+        port=int(os.getenv('DB_PORT', 3306)),
         user=os.getenv('DB_USER'),
         password=os.getenv('DB_PASSWORD'),
         database=os.getenv('DB_NAME'),
@@ -69,18 +68,16 @@ def get_db_connection():
     )
     return conn
 
+
 @app.route("/")
 def home():
    return "Bienvenido a GameMarket"
 
-
-# ---------------- PERFIL (verificación de sesión) ---------------- #
+# ---------------- PERFIL ---------------- #
 @app.route("/perfil", methods=["GET"])
 def perfil_usuario():
-   # Aquí se comprueba si la cookie de sesión fue enviada por el navegador
    email = session.get("user") 
    if email:
-       # Obtener rol de BD
        conn = get_db_connection()
        cursor = conn.cursor()
        cursor.execute("SELECT rol FROM usuarios WHERE username=%s", (email,))
@@ -92,10 +89,7 @@ def perfil_usuario():
            return jsonify({"email": email, "rol": user["rol"]})
        else:
            return jsonify({"error": "Usuario no encontrado"}), 404
-   else:
-       # Si session.get("user") es None, la cookie no llegó o no es válida.
-       return jsonify({"error": "No estas logueado"}), 401
-
+   return jsonify({"error": "No estas logueado"}), 401
 
 # ---------------- GAMES ---------------- #
 @app.route("/api/games", methods=["GET"])
@@ -108,7 +102,7 @@ def get_games():
    conn.close()
    return jsonify(games)
 
-
+# ---------------- CLIENTS Y COMPRAS ---------------- #
 @app.route("/api/clients", methods=["GET"])
 def get_clients():
    conn = get_db_connection()
@@ -123,7 +117,6 @@ def get_clients():
    conn.close()
    return jsonify(rows)
 
-
 @app.route("/api/clients", methods=["POST"])
 def add_client():
     data = request.get_json()
@@ -133,41 +126,69 @@ def add_client():
     last_name = data.get("last_name")
     game_id = data.get("game_id")
     payment_method = data.get("payment_method")
+    quantity = int(data.get("quantity", 1))  # ✅ ahora cantidad funciona
 
-    if not first_name or not last_name or not game_id or not payment_method:
-        print("⚠️ Faltan datos:", first_name, last_name, game_id, payment_method)
-        return jsonify({"error": "Faltan datos"}), 400
+    # ✅ Validación corregida (sin platform_name)
+    if not all([first_name, last_name, game_id, payment_method]):
+        return jsonify({"error": "Faltan datos (nombre, juego o método de pago)"}), 400
+
+    # ✅ Evitar cantidades inválidas
+    if quantity <= 0:
+        return jsonify({"error": "La cantidad debe ser mayor que 0"}), 400
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Insertar cliente
+        # ----------------------------------------------------
+        # ✅ 1. DESCONTAR STOCK (versión corregida para tu BD)
+        # ----------------------------------------------------
+        cursor.execute(
+            "SELECT stock_quantity FROM inventory WHERE game_id = %s",
+            (game_id,)
+        )
+        stock_result = cursor.fetchone()
+
+        if not stock_result:
+            return jsonify({"error": f"No existe stock registrado para el juego con ID {game_id}"}), 404
+
+        current_stock = stock_result["stock_quantity"]
+
+        if current_stock < quantity:
+            return jsonify({"error": f"Stock insuficiente: quedan {current_stock} unidades."}), 409
+
+        cursor.execute(
+            "UPDATE inventory SET stock_quantity = stock_quantity - %s WHERE game_id = %s",
+            (quantity, game_id)
+        )
+
+        # ----------------------------------------------------
+        # ✅ 2. Registrar Cliente y Compra
+        # ----------------------------------------------------
         cursor.execute(
             "INSERT INTO client (first_name, last_name, game_id) VALUES (%s, %s, %s)",
             (first_name, last_name, game_id)
         )
         client_id = cursor.lastrowid
 
-        # Insertar compra con método de pago
         cursor.execute(
             "INSERT INTO buys (client_id, game_id, payment_method) VALUES (%s, %s, %s)",
             (client_id, game_id, payment_method)
         )
 
         conn.commit()
-        print(f"✅ Compra registrada: {first_name} {last_name} - {payment_method}")
+        print(f"✅ Compra registrada y stock descontado: {first_name} {last_name} (-{quantity} unidades)")
 
-        return jsonify({"message": "Compra registrada correctamente"}), 201
+        return jsonify({"message": "Compra registrada y stock actualizado correctamente"}), 201
 
     except Exception as err:
-        print("❌ Error al registrar compra:", err)
+        conn.rollback()
+        print("❌ Error crítico, se hizo ROLLBACK:", err)
         return jsonify({"error": f"Error de DB: {err}"}), 500
 
     finally:
         cursor.close()
         conn.close()
-
 
 # ---------------- REGISTRO ---------------- #
 @app.route('/api/register', methods=['POST'])
@@ -184,7 +205,6 @@ def register_user():
        conn = get_db_connection()
        cursor = conn.cursor()
 
-       # Verificar si ya existe el username
        cursor.execute("SELECT * FROM usuarios WHERE username=%s", (username,))
        existing_user = cursor.fetchone()
        if existing_user:
@@ -203,7 +223,6 @@ def register_user():
        cursor.close()
        conn.close()
 
-
 # ---------------- LOGIN ---------------- #
 @app.route("/login", methods=["POST"])
 def login_user():
@@ -211,14 +230,11 @@ def login_user():
    if not data:
        return jsonify({"success": False, "message": "No se recibieron datos"}), 400
 
-
    username = data.get("username")
    password = data.get("password")
 
-
    if not username or not password:
        return jsonify({"success": False, "message": "Faltan datos"}), 400
-
 
    conn = get_db_connection()
    cursor = conn.cursor()
@@ -227,28 +243,22 @@ def login_user():
    cursor.close()
    conn.close()
 
-
    if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-       # Si el login es exitoso, Flask establece la cookie de sesión
        session['user'] = username 
        return jsonify({"success": True, "message": "Login exitoso", "rol": user['rol']})
-   else:
-       return jsonify({"success": False, "message": "Usuario o contraseña incorrectos"}), 401
-
+   return jsonify({"success": False, "message": "Usuario o contraseña incorrectos"}), 401
 
 @app.route("/logout", methods=["POST"])
 def logout_user():
    session.pop('user', None)
    return jsonify({"success": True, "message": "Logout exitoso"})
 
-
-# ---------------- ADMIN ENDPOINT ---------------- #
+# ---------------- ADMIN ---------------- #
 @app.route("/admin", methods=["GET"])
 def admin_only():
    email = session.get("user")
    if not email:
        return jsonify({"error": "No autenticado"}), 401
-
 
    conn = get_db_connection()
    cursor = conn.cursor()
@@ -257,18 +267,13 @@ def admin_only():
    cursor.close()
    conn.close()
 
-
    if not result:
        return jsonify({"error": "Usuario no encontrado"}), 404
-
 
    if result['rol'] != 'admin':
        return jsonify({"error": "Acceso denegado"}), 403
 
-
    return jsonify({"message": f"Bienvenido admin {email}"}), 200
 
-
 if __name__ == "__main__":
-   # 💡 Usar 0.0.0.0 asegura que la aplicación sea accesible en la red local si es necesario
    app.run(host="0.0.0.0", port=5000, debug=True)
