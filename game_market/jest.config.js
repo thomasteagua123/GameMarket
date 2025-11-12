@@ -1,8 +1,16 @@
 export default {
+  testEnvironment: 'jsdom',
   transform: {
-    "^.+\\.(js|jsx)$": "babel-jest",
+    '^.+\\.[tj]sx?$': 'babel-jest'
   },
-  testEnvironment: "jsdom",
-  moduleFileExtensions: ["js", "jsx"],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1'  // Para usar alias como en Vite
+  },
+  setupFilesAfterEnv: ['<rootDir>/tests/setupTests.js'],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!src/main.jsx' // excluye el entrypoint
+  ]
 };

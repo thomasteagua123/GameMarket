@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./games.css";
 
-
-
-export function Games({ filteredGames, handleAddToCart , games}) {
+export function Games({ filteredGames, handleAddToCart, games }) {
   const lista = filteredGames?.length > 0 ? filteredGames : games;
-  console.log(games)
+
+  // 🔹 Si no hay juegos disponibles, mostrar un mensaje
+  if (!lista || lista.length === 0) {
+    return <p>No hay juegos disponibles</p>;
+  }
 
   // 🔹 PAGINACIÓN
   const [currentPage, setCurrentPage] = useState(1);
